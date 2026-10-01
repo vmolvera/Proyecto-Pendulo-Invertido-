@@ -1,0 +1,38 @@
+title: "Péndulo Invertido | QUBE-Servo 3"
+
+description: >
+  Modelado, análisis, control LQR, observador de estados
+  e implementación experimental de un péndulo invertido
+  utilizando QUBE-Servo 3.
+
+remote_theme: just-the-docs/just-the-docs@v0.12.0
+
+plugins:
+  - jekyll-remote-theme
+
+url: "https://vmolvera.github.io"
+baseurl: "/Proyecto-Pendulo-Invertido-"
+
+color_scheme: light
+
+search_enabled: true
+heading_anchors: true
+
+back_to_top: true
+back_to_top_text: "Volver arriba"
+
+aux_links:
+  "GitHub":
+    - "https://github.com/vmolvera/Proyecto-Pendulo-Invertido-"
+
+aux_links_new_tab: true
+
+footer_content: >
+  Proyecto de Control Avanzado |
+  Ingeniería Mecatrónica y Sistemas Ciberfísicos |
+  IBERO
+
+markdown: kramdown
+
+kramdown:
+  math_engine: mathjax

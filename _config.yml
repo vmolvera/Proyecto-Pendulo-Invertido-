@@ -25,3 +25,11 @@ aux_links:
 aux_links_new_tab: true
 
 gh_edit_link: false
+
+back_to_top: true
+back_to_top_text: "Volver arriba"
+
+markdown: kramdown
+
+kramdown:
+  math_engine: mathjax

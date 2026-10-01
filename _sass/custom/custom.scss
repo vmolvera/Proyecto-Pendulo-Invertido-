@@ -1,11 +1,322 @@
-$link-color: #EE3D42;
-$btn-primary-color: #EE3D42;
+/* =========================================================
+   PORTAFOLIO PÉNDULO INVERTIDO
+   UNIVERSIDAD IBEROAMERICANA
+   ========================================================= */
 
-$body-background-color: #ffffff;
-$sidebar-color: #f7f6f5;
+$ibero-red: #EE3D42;
+$ibero-red-dark: #C92F35;
+$ibero-gray: #82786F;
+$ibero-black: #231F20;
+$ibero-light: #F7F6F5;
+$ibero-border: #E5E2E0;
+$ibero-text: #4A4543;
 
-$body-heading-color: #231f20;
-$body-text-color: #4a4543;
+/* =========================================================
+   CABECERA
+   ========================================================= */
 
-$nav-child-link-color: #5f5854;
-$border-color: #e5e2e0;
+.site-header {
+  background-color: $ibero-red !important;
+  border-bottom: none !important;
+  min-height: 94px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 300;
+}
+
+.site-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem;
+  color: #fff !important;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+
+.site-title:hover {
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+/* =========================================================
+   LOGO IBERO
+   ========================================================= */
+
+.site-logo {
+  display: block !important;
+  width: 185px !important;
+  height: 72px !important;
+  min-width: 185px !important;
+  flex: 0 0 185px !important;
+  background-repeat: no-repeat !important;
+  background-position: left center !important;
+  background-size: contain !important;
+}
+
+.site-title::after {
+  content: "| Portafolio";
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   BOTÓN DEL MENÚ
+   ========================================================= */
+
+.site-button {
+  color: #fff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.site-header svg,
+.site-button svg {
+  color: #fff !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* =========================================================
+   BARRA LATERAL
+   ========================================================= */
+
+.side-bar {
+  background-color: $ibero-light;
+}
+
+.nav-list .nav-list-item .nav-list-link {
+  color: #403B39;
+  border-radius: 5px;
+  transition: background-color .15s ease, color .15s ease;
+}
+
+.nav-list .nav-list-item .nav-list-link:hover {
+  color: $ibero-red !important;
+  background-color: rgba(238,61,66,.06);
+}
+
+.nav-list .nav-list-item .nav-list-link.active {
+  color: $ibero-red !important;
+  font-weight: 700;
+  background-color: rgba(238,61,66,.10);
+}
+
+/* =========================================================
+   MENÚ FIJO EN COMPUTADORA
+   ========================================================= */
+
+@media (min-width: 66.5rem) {
+
+  .site-nav {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    position: fixed !important;
+    top: 94px;
+    left: 0;
+    bottom: 0;
+
+    width: 285px !important;
+
+    padding: 1.25rem .8rem 2rem .8rem;
+
+    overflow-y: auto;
+
+    background-color: $ibero-light !important;
+
+    border-right: 1px solid $ibero-border;
+
+    z-index: 150;
+  }
+
+  .main {
+    margin-left: 285px !important;
+  }
+
+  #menu-button {
+    display: none !important;
+  }
+
+  .nav-list .nav-list-item {
+    margin-bottom: .12rem;
+  }
+
+  .nav-list .nav-list-item .nav-list-link {
+    padding-top: .52rem;
+    padding-bottom: .52rem;
+  }
+}
+
+/* =========================================================
+   MÓVIL / TABLET
+   ========================================================= */
+
+@media (max-width: 66.49rem) {
+
+  .site-nav {
+    position: static !important;
+    width: auto !important;
+  }
+
+  #menu-button {
+    display: flex !important;
+    color: #fff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .main {
+    margin-left: 0 !important;
+  }
+}
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.main-content {
+  line-height: 1.7;
+  color: $ibero-text;
+}
+
+.main-content h1 {
+  color: $ibero-black;
+  font-weight: 700;
+  letter-spacing: -.7px;
+}
+
+.main-content h2 {
+  color: $ibero-black;
+  font-weight: 700;
+  border-bottom: 1px solid #E8E5E3;
+  padding-bottom: .35rem;
+  margin-top: 2.5rem;
+}
+
+.main-content h3 {
+  color: $ibero-gray;
+  font-weight: 650;
+}
+
+.main-content h4 {
+  color: $ibero-black;
+  font-weight: 600;
+}
+
+.main-content strong {
+  color: $ibero-text;
+}
+
+.main-content a {
+  color: $ibero-red;
+}
+
+.main-content a:hover {
+  color: $ibero-red-dark;
+}
+
+/* =========================================================
+   TABLAS
+   ========================================================= */
+
+.main-content table {
+  width: 100%;
+  border-radius: 7px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+.main-content th {
+  background-color: $ibero-red !important;
+  color: #fff !important;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.main-content td {
+  vertical-align: middle;
+}
+
+.main-content tbody tr:nth-child(even) {
+  background-color: #FAF9F8;
+}
+
+/* =========================================================
+   CÓDIGO
+   ========================================================= */
+
+.main-content pre {
+  border: 1px solid #DEDAD8;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.main-content code {
+  border-radius: 4px;
+}
+
+/* =========================================================
+   IMÁGENES
+   ========================================================= */
+
+.main-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 7px;
+}
+
+.main-content img + em {
+  display: block;
+  margin-top: .5rem;
+  color: $ibero-gray;
+  font-size: .9rem;
+  text-align: center;
+}
+
+/* =========================================================
+   BUSCADOR
+   ========================================================= */
+
+.search-input {
+  border-radius: 6px !important;
+}
+
+.search-input:focus {
+  border-color: $ibero-red !important;
+  box-shadow: 0 0 0 2px rgba(238,61,66,.12) !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 50rem) {
+
+  .site-header {
+    min-height: 80px;
+  }
+
+  .site-logo {
+    width: 130px !important;
+    height: 51px !important;
+    min-width: 130px !important;
+    flex: 0 0 130px !important;
+  }
+
+  .site-title::after {
+    font-size: 1.15rem;
+  }
+
+  .main-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .main-content {
+    line-height: 1.6;
+  }
+}

@@ -9,6 +9,8 @@ permalink: /
 
 ## Proyecto de Control Avanzado y Robótica
 
+**QUBE-Servo 3 · Control LQR · Observador de Estados**
+
 Este portafolio digital documenta el desarrollo, implementación y validación experimental de un sistema de **Control Avanzado** aplicado a la plataforma **QUBE-Servo 3 en configuración de péndulo invertido**.
 
 El proyecto integra el modelado dinámico del sistema, su representación en **espacio de estados**, el diseño de un **Regulador Cuadrático Lineal (LQR)** para estabilizar el péndulo y la implementación de un **observador de estados** para la estimación de variables del sistema.
@@ -113,3 +115,4 @@ El flujo general implementado en el sistema es:
            Movimiento correctivo
                       ↓
         Estabilización del péndulo
+```

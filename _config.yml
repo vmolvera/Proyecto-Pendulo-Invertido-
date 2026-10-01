@@ -1,21 +1,16 @@
 title: "IBERO | Portafolio"
-
 description: "Proyecto de Control Avanzado - Péndulo Invertido QUBE-Servo 3"
 
 theme: just-the-docs
-
 color_scheme: ibero
 
 logo: "/assets/images/logo.png"
 
 url: "https://vmolvera.github.io"
-
 baseurl: "/Proyecto-Pendulo-Invertido-"
 
-search_enabled: true
-
+search_enabled: false
 heading_anchors: true
-
 nav_enabled: true
 
 aux_links:
@@ -23,11 +18,7 @@ aux_links:
     - "https://github.com/vmolvera/Proyecto-Pendulo-Invertido-"
 
 aux_links_new_tab: true
-
 gh_edit_link: false
-
-back_to_top: true
-back_to_top_text: "Volver arriba"
 
 markdown: kramdown
 

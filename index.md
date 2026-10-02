@@ -116,3 +116,10 @@ El flujo general implementado en el sistema es:
                       ↓
         Estabilización del péndulo
 ```
+---
+
+## Integrantes
+
+- Víctor Manuel Olvera de la Cruz
+- Valerie 
+- Omar 

@@ -48,9 +48,17 @@ $$K = \begin{bmatrix} -1.0000 & 29.5241 & -0.9390 & 2.4383 \end{bmatrix}$$
 **Verificación de Estabilidad:** 
 Al aplicar esta ley de control, la dinámica de la planta cambia a la matriz de lazo cerrado $A_{cl} = A - BK$. Los nuevos polos del sistema controlados calculados son:
 
-* $p_1 = -16.0167$
-* $p_2 = -12.9444$
-* $p_{3,4} = -3.2766 \pm 0.7998i$
+$$
+p_1 = -16.0167
+$$
+
+$$
+p_2 = -12.9444
+$$
+
+$$
+p_{3,4} = -3.2766 \pm 0.7998i
+$$
 
 Dado que todos los polos se ubican en el semiplano izquierdo (parte real estrictamente negativa), se comprobó analíticamente que la ganancia $K$ elegida **estabiliza el sistema asintóticamente**.
 

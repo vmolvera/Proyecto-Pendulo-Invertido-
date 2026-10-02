@@ -10,8 +10,7 @@ El controlador diseñado analíticamente en MATLAB fue implementado en Simulink 
 
 El modelo se estructuró de manera jerárquica para aislar el procesamiento de señales, facilitar el diseño de los estimadores y cerrar el lazo de control en tiempo real.
 
-*(Inserta aquí la imagen del nivel superior del diagrama)*
-`![Diagrama Principal](assets/images/diagrama_principal.png)`
+![Diagrama Principal](assets/images/diagrama_princ.png)
 
 ## Arquitectura general
 
@@ -27,8 +26,7 @@ El bloque de hardware interactúa directamente con la planta física.
 * **Lectura:** Los encoders proporcionan las posiciones del brazo rotacional (`baseEncoder`) y del péndulo (`pendulumEncoder`) expresadas puramente en "cuentas" digitales (counts).
 * **Escritura:** Recibe la señal de voltaje de control final para accionar el motor, pasando previamente por una ganancia de `-1` para estandarizar el giro positivo en sentido antihorario (CCW).
 
-*(Inserta aquí la imagen del interior del bloque Qube With Pendulum)*
-`![Interfaz Hardware](assets/images/qube_io.png)`
+![Interfaz Hardware](assets/images/qube_pend.png)
 
 ## 2. Acondicionamiento (Counts to Angles)
 
@@ -36,8 +34,7 @@ El subsistema **Counts to Angles** transforma las cuentas digitales a posiciones
 * Se aplica una ganancia de $\frac{2\pi}{512 \times 4}$ a las señales de ambos encoders, correspondiendo a la resolución en cuadratura del sensor.
 * Para el péndulo, se incluye una función de MATLAB que corrige la señal en crudo y mantiene la continuidad del ángulo $\alpha$.
 
-*(Inserta aquí la imagen de Counts to Angles)*
-`![Counts to Angles](assets/images/counts_to_angles.png)`
+![Counts to Angles](assets/images/counts.png)
 
 ## 3. Construcción del vector (State X) y Observadores
 
@@ -49,9 +46,9 @@ Dado que las velocidades no se miden directamente, el subsistema **State X** imp
 1. **Filtros de Primer Orden:** Derivadas filtradas tradicionales $\left(\frac{50s}{s+50}\right)$ enviadas al Workspace para fines comparativos.
 2. **Observadores Cinemáticos de Tercer Orden:** Subsistemas dedicados que utilizan tres integradores en cascada y las ganancias calculadas ($l, m, \beta$) para estimar $\hat{\dot{\theta}}$ y $\hat{\dot{\alpha}}$ suprimiendo el ruido de alta frecuencia de forma robusta. Estas son las señales que realmente alimentan al controlador.
 
-*(Inserta aquí la imagen de State X y la de un subsistema del observador)*
-`![Vector de Estados](assets/images/state_x.png)`
-`![Observador de Tercer Orden](assets/images/observador_adentro.png)`
+![Vector de Estados](assets/images/estadox.png)
+![Observador de Theta](assets/images/obs_t.png)
+![Observador de Alfa](assets/images/obs_a.png)
 
 ## 4. Control LQR
 

@@ -1,11 +1,11 @@
 ---
 layout: default
-title: 7. Código fuente
+title: 7. Código Fuente
 nav_order: 8
 permalink: /codigo/
 ---
 
-# Código fuente
+# Código Fuente
 
 En esta sección se presenta el código principal desarrollado en **MATLAB** para el modelado, análisis y diseño del sistema de control del péndulo invertido utilizando el **QUBE-Servo 3**.
 

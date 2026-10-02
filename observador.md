@@ -6,82 +6,66 @@ nav_order: 7
 
 # Observador de estados
 
-Una etapa posterior del proyecto consiste en diseñar un observador para reconstruir estados que no se desean medir directamente.
+En la práctica, los encoders de la plataforma Quanser únicamente miden las posiciones angulares ($\theta$ y $\alpha$). Para implementar la ley de control LQR ($u = -Kx$), es indispensable conocer también las velocidades ($\dot{\theta}$ y $\dot{\alpha}$). 
 
-Un observador utiliza:
+En lugar de utilizar un observador de Luenberger dependiente del modelo físico de la planta (el cual es vulnerable a variaciones paramétricas), se diseñaron **observadores cinemáticos locales de tercer orden**.
 
-- El modelo matemático.
-- La entrada aplicada al sistema.
-- Las salidas disponibles.
+## El problema de la derivada pura
 
-para obtener una estimación del vector de estados.
+Derivar la posición numéricamente para obtener la velocidad amplifica severamente el ruido eléctrico de alta frecuencia de los sensores. Esto inyecta vibraciones destructivas al motor. Para solucionar esto, el observador cinemático funciona como un diferenciador robusto que estima la velocidad mientras actúa simultáneamente como un filtro pasa-bajas.
 
-## Modelo
+## Dinámica del Observador Cinemático
 
-El observador de Luenberger puede expresarse como:
+Para estimar la velocidad de cada variable de forma independiente, se definió un subsistema de tres estados internos. Tomando la posición $\theta$ como ejemplo, las variables del observador son:
 
-$$
-\dot{\hat{x}}
-=
-A\hat{x}
-+
-Bu
-+
-L(y-C\hat{x})
-$$
+* $x_1 = \hat{\theta}$ (Posición estimada)
+* $x_2 = \hat{\dot{\theta}}$ (Velocidad estimada)
+* $x_3 = z$ (Estado interno del tercer integrador)
 
-donde:
+A partir del diagrama de bloques implementado, el error de estimación se define como $e = \theta - x_1$. Las ecuaciones diferenciales que rigen este observador son:
 
-- $\hat{x}$ corresponde al estado estimado.
-- $L$ es la ganancia del observador.
-- $y-C\hat{x}$ es el error entre la medición y la salida estimada.
+$$ \dot{x}_1 = x_2 $$
 
-## Error de estimación
+$$ \dot{x}_2 = l(\theta - x_1) + m \cdot x_3 $$
 
-Definiendo:
+$$ \dot{x}_3 = (\theta - x_1) - \beta \cdot x_3 $$
+
+Expresando este sistema en representación de espacio de estados ($\dot{\hat{x}} = \hat{A}\hat{x} + \hat{B}\theta$), obtenemos las matrices del observador ($\hat{A}_\theta$ y $\hat{B}_\theta$):
 
 $$
-e=x-\hat{x}
+\hat{A}_\theta =
+\begin{bmatrix}
+0 & 1 & 0 \\
+-l & 0 & m \\
+-1 & 0 & -\beta
+\end{bmatrix}
 $$
 
-la dinámica del error es:
-
 $$
-\dot{e}=(A-LC)e
-$$
-
-Por lo tanto, los polos del observador corresponden a los valores propios de:
-
-$$
-A-LC
+\hat{B}_\theta =
+\begin{bmatrix}
+0 \\
+l \\
+1
+\end{bmatrix}
 $$
 
-## Selección de polos
+## Selección de Polos y Cálculo de Ganancias
 
-Los polos del observador no tienen que ser exactamente iguales a los polos del controlador.
+Para garantizar que el error de estimación converja a cero rápidamente sin desestabilizar la planta, los polos del observador deben ser significativamente más rápidos que la dinámica del controlador LQR (cuyos polos dominantes se ubican en $s \approx -3.27$).
 
-Normalmente se seleccionan con una dinámica más rápida que la del sistema controlado, de forma que el error de estimación converja suficientemente rápido.
+Se propuso ubicar los tres polos del observador en:
 
-Sin embargo, seleccionar polos excesivamente rápidos puede incrementar la sensibilidad al ruido experimental.
+$$ p_1 = -100, \quad p_2 = -100, \quad p_3 = -100 $$
 
-## Observador de orden reducido
+Al desarrollar el polinomio característico deseado $(s + 100)^3 = 0$ e igualarlo con el polinomio teórico de la matriz $\hat{A}_\theta$, se despejaron algebraicamente las ganancias necesarias mediante MATLAB:
 
-Para este proyecto se contempla la implementación de un observador de tercer orden.
+* $l = 30000$
+* $m = -8000000$
+* $\beta = 300$
 
-Esto implica utilizar directamente una de las variables disponibles mediante medición y estimar los tres estados restantes.
+Estas mismas ganancias se aplicaron de forma simétrica para el subsistema encargado de estimar la velocidad del péndulo ($\hat{\dot{\alpha}}$).
 
-El diseño definitivo dependerá de la salida seleccionada como medición directa.
+## Implementación
 
-## Estado actual
-
-Esta etapa se encuentra actualmente en desarrollo.
-
-Una vez implementada se incluirán:
-
-- Matriz $L$.
-- Polos seleccionados.
-- Diagrama de Simulink.
-- Estados medidos.
-- Estados estimados.
-- Error de estimación.
-- Gráficas superpuestas de $x$ y $\hat{x}$.
+Con los polos fijos en $-100$, el observador es aproximadamente 30 veces más rápido que la planta física. Esto asegura que la señal de velocidad se limpie del ruido del sensor y converja a su valor real casi instantáneamente, entregando estados precisos a la matriz de retroalimentación $K$ mucho antes de que el motor requiera ejecutar la acción de control de estabilización.

@@ -66,5 +66,5 @@ Durante las pruebas físicas, al colocar el péndulo cerca de la posición verti
 
 ## Consideraciones
 
-* **Naturaleza Lineal:** El controlador LQR corresponde a un diseño lineal válido exclusivamente alrededor del equilibrio vertical. Solo es efectivo si el péndulo inicia o es llevado manualmente a una zona próxima a $0^\circ$ (típicamente $\pm 20^\circ$).
-* **Falta de Estrategia de Levantamiento:** Por su misma naturaleza lineal local, esta ganancia no sustituye por sí sola a una estrategia de *swing-up*. No tiene la capacidad para inyectar energía y elevar el péndulo desde su posición colgante (reposo inferior) hacia la vertical.
+* **Naturaleza lineal:** El controlador LQR corresponde a un diseño lineal válido exclusivamente alrededor del equilibrio vertical. Solo es efectivo si el péndulo inicia o es llevado manualmente a una zona próxima a $0^\circ$ (típicamente $\pm 10^\circ$).
+* **Falta de estrategia de levantamiento:** Por su misma naturaleza lineal local, esta ganancia no sustituye por sí sola a una estrategia de *swing-up*. No tiene la capacidad para inyectar energía y elevar el péndulo desde su posición colgante (reposo inferior) hacia la vertical.

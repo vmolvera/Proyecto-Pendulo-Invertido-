@@ -7,24 +7,24 @@ permalink: /introduccion/
 
 # Introducción
 
-El **péndulo invertido** es uno de los sistemas clásicos utilizados para estudiar técnicas de control debido a que su posición vertical superior corresponde a un punto de equilibrio inherentemente inestable.
+El **péndulo invertido** es uno de los sistemas clásicos utilizados para el estudio y validación de técnicas de control debido a que su posición vertical superior corresponde a un punto de equilibrio inherentemente inestable.
 
-Una pequeña perturbación puede provocar que el péndulo se aleje rápidamente de dicha posición si no existe una acción de control capaz de compensar su movimiento.
+Una pequeña perturbación puede provocar que el péndulo se aleje rápidamente de esta posición si no existe una acción de control capaz de compensar su movimiento.
 
-En este proyecto se utiliza la plataforma **QUBE-Servo 3 de Quanser** en configuración de péndulo rotacional invertido para implementar y validar experimentalmente técnicas de **Control Avanzado**.
+En este proyecto se utiliza la plataforma **QUBE-Servo 3 de Quanser** en configuración de péndulo rotacional invertido para implementar y validar experimentalmente técnicas de **Control Avanzado**, integrando modelado matemático, representación en espacio de estados, control óptimo y estimación de variables.
 
 ---
 
 ## QUBE-Servo 3
 
-El QUBE-Servo 3 es una plataforma de control rotacional que integra un servomotor, un brazo horizontal, un péndulo y sensores de posición angular.
+El **QUBE-Servo 3** es una plataforma de control rotacional compuesta por un servomotor, un brazo horizontal, un péndulo y sensores de posición angular.
 
-Para este proyecto se utiliza la configuración de **péndulo invertido**, donde el movimiento del brazo rotacional permite generar las acciones necesarias para mantener el péndulo alrededor de su posición vertical superior.
+Para este proyecto se utiliza la configuración de **péndulo invertido**, en la cual el movimiento del brazo rotacional permite generar las acciones necesarias para mantener el péndulo alrededor de su posición vertical superior.
 
 Las principales variables consideradas son:
 
 - ($\theta$) Posición angular del brazo rotacional.
-- ($\alpha$) Posición angular del péndulo.
+- ($\alpha$) Posición angular del péndulo respecto a la vertical.
 - ($\dot{\theta}$) Velocidad angular del brazo.
 - ($\dot{\alpha}$) Velocidad angular del péndulo.
 
@@ -40,57 +40,43 @@ x=
 \end{bmatrix}
 $$
 
-La entrada de control corresponde al voltaje aplicado al motor ($$u = V_m$$)
+La entrada de control corresponde al voltaje aplicado al motor ($$u=V_m$$)
 
 ---
 
 ## Desarrollo del proyecto
 
-El proyecto se divide en dos etapas principales.
+El proyecto se desarrolla en dos etapas principales.
 
 ### Primera etapa: Control LQR
 
-La primera etapa consiste en diseñar e implementar un **Regulador Cuadrático Lineal (LQR)**.
+La primera etapa consiste en diseñar e implementar un **Regulador Cuadrático Lineal (LQR)** para estabilizar el péndulo alrededor de su posición vertical superior.
 
-El controlador utiliza la realimentación de los estados del sistema mediante la ley ($$u=-Kx$$) donde:
+El controlador utiliza la realimentación de los estados mediante la ley ($$u=-Kx$$) donde:
 
-- ($u$) es la acción de control aplicada al motor.
-- ($K$) es la matriz de ganancias del controlador.
-- ($x$) es el vector de estados.
-
-El objetivo es mantener el péndulo alrededor de la posición vertical superior.
-
-Debido a que el proyecto se concentra en el control de balance, no se implementa una estrategia no lineal de *swing-up*. El péndulo se lleva manualmente hasta una región cercana a la vertical para que el controlador LQR pueda actuar.
+- ($u$) Acción de control aplicada al motor.
+- ($K$) Matriz de ganancias del controlador.
+- ($x$) Vector de estados del sistema.
 
 ---
 
-### Segunda etapa: Observador de estados
+### Segunda etapa: Estimación de estados
 
-La segunda etapa consiste en implementar un **observador de estados**.
+La segunda etapa se concentra en la estimación de variables que no se obtienen directamente de la misma manera que las posiciones medidas por los encoders.
 
-Las técnicas de estimación permiten reconstruir variables del sistema utilizando las mediciones disponibles y un modelo dinámico o cinemático.
+En particular, se busca obtener estimaciones de las velocidades angulares ($$\dot{\theta}$$) y ($$\dot{\alpha}$$).
 
-En este proyecto se busca analizar principalmente la estimación de las velocidades angulares:
+La implementación desarrollada utiliza un **observador de tercer orden** para procesar las señales de posición y obtener estimaciones de posición y velocidad.
 
-$$
-\dot{\theta}
-$$
+Posteriormente, su comportamiento se compara con un observador de primer orden utilizada también para estimar las velocidades a partir de las posiciones medidas.
 
-y
-
-$$
-\dot{\alpha}
-$$
-
-para posteriormente comparar los valores obtenidos mediante distintos métodos de estimación.
-
-La implementación desarrollada contempla un estimador de tercer orden y una comparación con una aproximación de primer orden utilizada para obtener las velocidades a partir de las posiciones medidas.
+Esta comparación permite analizar diferencias en rapidez de respuesta, suavidad, desfase y comportamiento en frecuencia.
 
 ---
 
 ## Implementación experimental
 
-La implementación del proyecto combina herramientas de software y hardware.
+El desarrollo del proyecto combina herramientas de hardware y software para pasar del modelo matemático a una implementación física en tiempo real.
 
 ### Hardware
 
@@ -105,33 +91,8 @@ La implementación del proyecto combina herramientas de software y hardware.
 
 - MATLAB.
 - Simulink.
-- Control System Toolbox.
-- Herramientas de Quanser para comunicación con el QUBE-Servo 3.
+- Herramientas de Quanser para la comunicación con el QUBE-Servo 3.
 
----
+MATLAB se utiliza principalmente para el cálculo de parámetros, construcción del modelo, análisis de controlabilidad, diseño del LQR y análisis del observador.
 
-## Flujo general
-
-El desarrollo completo del proyecto sigue la secuencia:
-
-```text
-Modelo físico
-     ↓
-Modelo matemático
-     ↓
-Espacio de estados
-     ↓
-Análisis de controlabilidad
-     ↓
-Diseño LQR
-     ↓
-Implementación en Simulink
-     ↓
-Prueba experimental
-     ↓
-Diseño del observador
-     ↓
-Comparación de estimaciones
-     ↓
-Análisis de resultados
-```
+Simulink permite implementar posteriormente el sistema de control, adquirir las señales de los encoders y ejecutar las pruebas sobre la plataforma física.

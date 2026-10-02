@@ -30,7 +30,7 @@ $$ \dot{x}_2 = l(\theta - x_1) + m \cdot x_3 $$
 
 $$ \dot{x}_3 = (\theta - x_1) - \beta \cdot x_3 $$
 
-Expresando este sistema en representación de espacio de estados ($\dot{\hat{x}} = \hat{A}\hat{x} + \hat{B}\theta$), obtenemos las matrices del observador ( $\hat{A}_\theta$ y $\hat{B}_\theta$ ):
+Expresando este sistema en representación de espacio de estados ($\dot{\hat{x}} = \hat{A}\hat{x} + \hat{B}\theta$), obtenemos las matrices del observador:
 
 $$
 \hat{A}_\theta =

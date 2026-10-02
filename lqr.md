@@ -6,94 +6,65 @@ nav_order: 6
 
 # Control LQR
 
-Para estabilizar el sistema se implementó un controlador **Linear Quadratic Regulator (LQR)**.
+Para estabilizar el sistema en su punto de equilibrio inestable se implementó un controlador **Linear Quadratic Regulator (LQR)**.
 
-El LQR obtiene una matriz de ganancias que minimiza el funcional:
+El controlador LQR calcula una matriz de retroalimentación de estados óptima al minimizar la siguiente función de costo cuadrática:
 
-$$
-J=
-\int_0^\infty
-\left(
-x^TQx+u^TRu
-\right)dt
-$$
+$$J = \int_0^\infty \left( x^T Q x + u^T R u \right) dt$$
 
 ## Ley de control
 
 La realimentación de estados utilizada es:
 
-$$
-u=-Kx
-$$
+$$u = -Kx$$
 
 donde:
+- $x$ es el vector de estados del sistema.
+- $K$ es la matriz de ganancias óptimas LQR.
+- $u$ es la señal de voltaje enviada al motor.
 
-- $x$ es el vector de estados.
-- $K$ es la ganancia LQR.
-- $u$ es la señal enviada al actuador.
+## Matrices de Ponderación (Q y R)
 
-## Matriz Q
+Para sintonizar el comportamiento del controlador, se ajustaron las matrices de peso buscando un equilibrio entre la agresividad del péndulo y la suavidad del brazo.
 
-Se utilizó:
+Se utilizó la matriz de estados $Q$:
 
-$$
-Q=
-\begin{bmatrix}
-10&0&0&0\\
-0&200&0&0\\
-0&0&1&0\\
-0&0&0&1
-\end{bmatrix}
-$$
+$$Q = \begin{bmatrix} 1 & 0 & 0 & 0\\ 0 & 20 & 0 & 0\\ 0 & 0 & 0.1 & 0\\ 0 & 0 & 0 & 0.1 \end{bmatrix}$$
 
-El peso correspondiente a $\alpha$ es mayor debido a que la prioridad principal del controlador consiste en mantener al péndulo alrededor de la posición vertical.
+El peso asignado a $\alpha$ (20) es significativamente mayor que el del resto de las variables debido a que la prioridad crítica del sistema es mantener el péndulo invertido. A las velocidades ($\dot{\theta}$ y $\dot{\alpha}$) se les asignó un peso bajo (0.1) para evitar que el controlador amplifique el ruido y genere oscilaciones indeseadas.
 
-## Matriz R
+Se utilizó el escalar de entrada $R$:
 
-Se utilizó:
+$$R = 1$$
 
-$$
-R=0.01
-$$
+Un valor de $R=1$ establece una penalización equitativa sobre el esfuerzo de control ($u$), garantizando que el motor trabaje sin llegar a voltajes destructivos de manera abrupta.
 
-La matriz $R$ penaliza el esfuerzo de control.
+## Ganancia Obtenida y Estabilidad en Lazo Cerrado
 
-## Ganancia obtenida
+Resolviendo la Ecuación Algebraica de Riccati en MATLAB (`lqr(A,B,Q,R)`), se obtuvo la siguiente matriz de ganancias:
 
-Mediante MATLAB se obtuvo aproximadamente:
+$$K = \begin{bmatrix} -1.0000 & 29.5241 & -0.9390 & 2.4383 \end{bmatrix}$$
 
-$$
-K=
-\begin{bmatrix}
--3.1623 &
-50.5188 &
--2.0542 &
-4.4057
-\end{bmatrix}
-$$
+**Verificación de Estabilidad:**
+Al aplicar esta ley de control, la dinámica de la planta cambia a la matriz de lazo cerrado $A_{cl} = A - BK$. Los nuevos polos del sistema controlados calculados son:
 
-Por lo tanto:
+$$p_1 = -16.0167$$
+$$p_2 = -12.9444$$
+$$p_{3,4} = -3.2766 \pm 0.7998i$$
 
-$$
-u=-Kx
-$$
+Dado que todos los polos se ubican en el semiplano izquierdo (parte real estrictamente negativa), se comprobó analíticamente que la ganancia $K$ elegida **estabiliza el sistema asintóticamente**.
 
-## Implementación experimental
+## Implementación Experimental
 
-La ganancia obtenida en MATLAB fue posteriormente implementada en Simulink.
+La ganancia $K$ obtenida fue posteriormente exportada al entorno de Quanser/Simulink.
 
-La estructura básica es:
+La arquitectura básica del lazo de control consiste en:
 
-**Estados → -K → Saturación → Motor**
+**Estados medidos/estimados → Multiplicación por Ganancia (-K) → Saturación de voltaje (±24V) → Motor DC**
 
-Durante las pruebas físicas, al colocar el péndulo cerca de la posición vertical, el controlador fue capaz de generar movimientos correctivos del brazo y mantener el péndulo invertido.
-
-Este resultado confirma experimentalmente el funcionamiento del controlador LQR alrededor del punto de operación para el cual fue diseñado.
+Durante las pruebas físicas, al colocar el péndulo cerca de la posición vertical ($\alpha \approx 0$), el controlador LQR comenzó a operar instantáneamente, calculando y ejecutando pequeños movimientos correctivos del brazo rotatorio para mantener al péndulo suspendido contra la gravedad. Este resultado físico es la confirmación definitiva del éxito del modelado y cálculo de control.
 
 ## Consideraciones
 
-El controlador LQR corresponde a un controlador lineal diseñado alrededor del equilibrio vertical.
-
-Por esta razón no sustituye por sí solo a una estrategia de swing-up para elevar el péndulo desde su posición inferior.
-
-La estabilización se realiza cuando el péndulo se encuentra suficientemente próximo a la región vertical.
+* **Naturaleza Lineal:** El controlador LQR corresponde a un diseño lineal válido exclusivamente alrededor del equilibrio vertical. Solo es efectivo si el péndulo inicia o es llevado manualmente a una zona próxima a $0^\circ$ (típicamente $\pm 20^\circ$).
+* **Falta de Estrategia de Levantamiento:** Por su misma naturaleza lineal local, esta ganancia no sustituye por sí sola a una estrategia de *swing-up*. No tiene la capacidad para inyectar energía y elevar el péndulo desde su posición colgante (reposo inferior) hacia la vertical.

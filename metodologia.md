@@ -9,36 +9,6 @@ permalink: /metodologia/
 
 El desarrollo del proyecto se realizó mediante una secuencia que integra el modelado matemático del **QUBE-Servo 3**, la representación del sistema en espacio de estados, el procesamiento de las señales obtenidas mediante sus encoders y la implementación del sistema de control en MATLAB y Simulink.
 
-El procedimiento general puede representarse como:
-
-```text
-QUBE-Servo 3
-      ↓
-Definición de parámetros físicos
-      ↓
-Cálculo de inercias
-      ↓
-Modelo matemático
-      ↓
-Representación en espacio de estados
-      ↓
-Análisis del sistema
-      ↓
-Lectura de encoders
-      ↓
-Conversión de cuentas a ángulos
-      ↓
-Construcción del vector de estados
-      ↓
-Control LQR
-      ↓
-Implementación experimental
-      ↓
-Observador de estados
-      ↓
-Análisis de resultados
-```
-
 ---
 
 ## 3.1 Plataforma experimental
@@ -59,48 +29,21 @@ El motor produce el movimiento del brazo rotacional, mientras que el péndulo se
 
 El objetivo del sistema de control es utilizar el movimiento del brazo para mantener el péndulo alrededor de su posición vertical superior.
 
-<!--
-IMAGEN PENDIENTE
+![Plataforma QUBE-Servo 3]({{ site.baseurl }}/assets/images/qube_pend.png)
 
-Subir como:
-assets/images/qube_servo3.png
-
-Luego quitar estos comentarios:
-
-![Plataforma QUBE-Servo 3](assets/images/qube_servo3.png)
-
-*Figura 1. Plataforma experimental QUBE-Servo 3 en configuración de péndulo invertido.*
--->
+*Figura 1. Plataforma QUBE-Servo 3 en configuración de péndulo invertido utilizada durante las pruebas experimentales.*
 
 ---
 
 ## 3.2 Definición de variables
 
-Para describir la dinámica del sistema se utilizan cuatro variables de estado.
+Para describir la dinámica del sistema se utilizan cuatro variables de estado:
 
-La posición angular del brazo rotacional se representa mediante:
+($$\theta$$) Posición angular del brazo rotacional.
 
-$$
-\theta
-$$
+($$\alpha$$) Posición angular del péndulo respecto a la vertical
 
-La posición angular del péndulo respecto a la vertical se representa mediante:
-
-$$
-\alpha
-$$
-
-Las velocidades angulares correspondientes son:
-
-$$
-\dot{\theta}
-$$
-
-y:
-
-$$
-\dot{\alpha}
-$$
+($$\dot{\theta}$$) / ($$\dot{\alpha}$$) Velocidades angulares 
 
 Por lo tanto, el vector de estados se define como:
 
@@ -133,11 +76,7 @@ x_4
 \end{bmatrix}
 $$
 
-La entrada del sistema corresponde al voltaje aplicado al motor:
-
-$$
-u=V_m
-$$
+La entrada del sistema corresponde al voltaje aplicado al motor ($$u=V_m$$).
 
 ---
 
@@ -171,17 +110,7 @@ Para construir el modelo matemático se utilizaron los parámetros nominales del
 | Amortiguamiento viscoso | $b_p$ | $5\times10^{-5}$ | N·m·s/rad |
 | Gravedad | $g$ | 9.81 | m/s² |
 
-El centro de masa del péndulo se considera en:
-
-$$
-l=\frac{L_p}{2}
-$$
-
-por lo tanto:
-
-$$
-l=\frac{0.129}{2}=0.0645\;m
-$$
+El centro de masa del péndulo se considera en ($$l=\frac{L_p}{2}$$), por lo tanto ($$l=\frac{0.129}{2}=0.0645\;m$$).
 
 ---
 
@@ -458,22 +387,6 @@ Co = ctrb(A,B);
 rango_C = rank(Co);
 ```
 
-Debido a que el sistema posee cuatro estados, debe cumplirse:
-
-$$
-rank(\mathcal{C})=4
-$$
-
-El resultado obtenido fue:
-
-$$
-rank(\mathcal{C})=4
-$$
-
-por lo tanto, el sistema es **completamente controlable**.
-
-Esta propiedad permite continuar con el diseño de un controlador por retroalimentación de estados.
-
 ---
 
 ## 3.10 Análisis de los polos de la planta
@@ -513,26 +426,6 @@ Inicialmente, estas señales se encuentran expresadas en cuentas digitales del e
 
 Por esta razón deben procesarse antes de ser utilizadas dentro del vector de estados.
 
-<!--
-IMAGEN PENDIENTE
-
-Esta es la captura donde aparecen:
-QUBE-Servo 3 I/O
-baseEncoder
-pendulumEncoder
-Counts to Angles
-State X
-
-Subir como:
-assets/images/qube_io_estados.png
-
-Después quitar estos comentarios:
-
-![Adquisición de señales del QUBE-Servo 3](assets/images/qube_io_estados.png)
-
-*Figura 2. Cadena de adquisición y procesamiento de las señales provenientes del QUBE-Servo 3.*
--->
-
 ---
 
 ## 3.12 Conversión de cuentas a ángulos
@@ -555,8 +448,8 @@ $$
 
 donde:
 
-- $N_\theta$ representa las cuentas del encoder del brazo.
-- $\theta$ representa la posición angular expresada en radianes.
+- ($N_\theta$) Cuentas del encoder del brazo.
+- ($\theta$) Posición angular expresada en radianes.
 
 Para el péndulo se utiliza:
 
@@ -570,39 +463,16 @@ $$
 
 donde:
 
-- $N_\alpha$ representa las cuentas del encoder del péndulo.
-- $\alpha_{raw}$ representa el ángulo obtenido directamente después de la conversión.
+- ($N_\alpha$) Cuentas del encoder del péndulo.
+- ($\alpha_{raw}$) Angulo obtenido directamente después de la conversión.
 
-La variable:
+La variable ($$\alpha_{raw}$$) corresponde a la señal angular antes de aplicar la corrección necesaria para establecer la referencia empleada durante el control del péndulo invertido.
 
-$$
-\alpha_{raw}
-$$
+Posteriormente se obtiene ($$\alpha$$) que representa el ángulo utilizado dentro del vector de estados.
 
-corresponde por lo tanto a la señal angular antes de aplicar la corrección necesaria para establecer la referencia empleada durante el control del péndulo invertido.
+![Conversión de cuentas a ángulos]({{ site.baseurl }}/assets/images/counts.png)
 
-Posteriormente se obtiene:
-
-$$
-\alpha
-$$
-
-que representa el ángulo utilizado dentro del vector de estados.
-
-<!--
-IMAGEN PENDIENTE
-
-Esta es la captura del interior de Counts to Angles.
-
-Subir como:
-assets/images/counts_to_angles.png
-
-Después quitar estos comentarios:
-
-![Conversión Counts to Angles](assets/images/counts_to_angles.png)
-
-*Figura 3. Subsistema Counts to Angles utilizado para convertir las cuentas de los encoders a posiciones angulares en radianes.*
--->
+*Figura 2. Subsistema `Counts to Angles` utilizado para convertir las cuentas de los encoders en posiciones angulares expresadas en radianes.*
 
 ---
 
@@ -632,38 +502,15 @@ x=
 \end{bmatrix}
 $$
 
-Las posiciones:
+Las posiciones ($$\theta,\quad\alpha$$) provienen directamente del procesamiento de las señales de los encoders.
 
-$$
-\theta,\quad\alpha
-$$
-
-provienen directamente del procesamiento de las señales de los encoders.
-
-Las velocidades:
-
-$$
-\dot{\theta},\quad\dot{\alpha}
-$$
-
-deben obtenerse mediante procesamiento de las posiciones angulares.
+Las velocidades ($$\dot{\theta},\quad\dot{\alpha}$$) deben obtenerse mediante procesamiento de las posiciones angulares.
 
 Durante el proyecto se utilizan diferentes metodologías para obtener o estimar estas velocidades, las cuales posteriormente son comparadas dentro de las secciones **Observador de Estados** y **Resultados**.
 
-<!--
-IMAGEN PENDIENTE
+![Construcción del vector de estados]({{ site.baseurl }}/assets/images/estadox.png)
 
-Esta es la captura completa del subsistema State X.
-
-Subir como:
-assets/images/state_x.png
-
-Después quitar estos comentarios:
-
-![Construcción del vector de estados](assets/images/state_x.png)
-
-*Figura 4. Subsistema State X utilizado para obtener y organizar las variables del vector de estados.*
--->
+*Figura 3. Subsistema `State X` utilizado para construir y procesar las variables del vector de estados.*
 
 ---
 
@@ -690,6 +537,8 @@ Control LQR
         ↓
 Enable Balance Control
         ↓
+Saturación
+        ↓
 Voltaje del motor
         ↓
 QUBE-Servo 3
@@ -699,25 +548,13 @@ El proceso se ejecuta continuamente, formando un sistema de **control en lazo ce
 
 El movimiento generado por el motor modifica nuevamente las posiciones del brazo y del péndulo, las cuales son medidas por los encoders y retroalimentadas al controlador.
 
-<!--
-IMAGEN PENDIENTE
+![Arquitectura general del sistema en Simulink]({{ site.baseurl }}/assets/images/diagrama_princ.png)
 
-Esta es la captura GENERAL del Simulink:
-Pendulum Control - LQR Balance Control
-
-Subir como:
-assets/images/simulink_lqr_general.png
-
-Después quitar estos comentarios:
-
-![Arquitectura general en Simulink](assets/images/simulink_lqr_general.png)
-
-*Figura 5. Implementación general del sistema de control del péndulo invertido en Simulink.*
--->
+*Figura 4. Arquitectura general implementada en Simulink para el control del péndulo invertido mediante el QUBE-Servo 3.*
 
 ---
 
-## 3.15 Lazo cerrado
+## 3.15 Funcionamiento en lazo cerrado
 
 La implementación completa funciona mediante realimentación continua de las variables del sistema.
 
@@ -728,15 +565,17 @@ El funcionamiento puede resumirse como:
         │     QUBE-Servo 3      │
         └───────────┬───────────┘
                     ↓
-               Encoders
+                 Encoders
                     ↓
-            θ, α, θ̇, α̇
+              θ, α, θ̇, α̇
                     ↓
-             Control LQR
+               Control LQR
                     ↓
                  u = -Kx
                     ↓
-             Voltaje motor
+                Saturación
+                    ↓
+              Voltaje del motor
                     ↓
         ┌───────────────────────┐
         │     QUBE-Servo 3      │
@@ -747,61 +586,7 @@ Esta realimentación permite que el controlador responda continuamente ante las 
 
 ---
 
-## 3.16 Procedimiento experimental
-
-Una vez construido el modelo y configurada la adquisición de señales, el procedimiento experimental seguido puede resumirse en los siguientes pasos:
-
-1. Conectar el QUBE-Servo 3 al sistema.
-
-2. Ejecutar el modelo desarrollado en Simulink.
-
-3. Verificar que los encoders entreguen mediciones correctamente.
-
-4. Convertir las cuentas de los encoders a posiciones angulares.
-
-5. Verificar las señales:
-
-$$
-\theta
-$$
-
-y:
-
-$$
-\alpha
-$$
-
-6. Construir el vector de estados:
-
-$$
-x=
-\begin{bmatrix}
-\theta &
-\alpha &
-\dot{\theta} &
-\dot{\alpha}
-\end{bmatrix}^{T}
-$$
-
-7. Verificar el funcionamiento de las señales antes de habilitar el controlador.
-
-8. Llevar manualmente el péndulo hacia una región cercana a la posición vertical superior.
-
-9. Habilitar el controlador LQR.
-
-10. Permitir que el controlador genere el voltaje necesario para compensar las desviaciones del péndulo.
-
-11. Registrar las variables relevantes durante el experimento.
-
-12. Incorporar posteriormente el sistema de estimación de estados.
-
-13. Comparar las variables obtenidas mediante diferentes metodologías.
-
-14. Analizar los resultados experimentales.
-
----
-
-## 3.17 Región de operación del controlador
+## 3.16 Región de operación del controlador
 
 El controlador LQR utilizado en el proyecto se diseña alrededor del punto de equilibrio correspondiente a la posición vertical superior.
 
@@ -813,70 +598,14 @@ Una vez dentro de esta zona de operación, el controlador comienza a generar mov
 
 ---
 
-## 3.18 Integración del observador
+## 3.17 Integración del sistema de estimación
 
-Después de validar la implementación del controlador LQR se incorpora la segunda etapa del proyecto correspondiente a la estimación de estados.
+Después de validar la implementación del controlador LQR se incorpora la segunda etapa del proyecto correspondiente a la estimación de variables.
 
-El sistema desarrollado permite analizar principalmente las estimaciones de las velocidades angulares:
+El sistema desarrollado permite analizar principalmente las estimaciones de las velocidades angulares ($$\dot{\theta}$$) y ($$\dot{\alpha}$$).
 
-$$
-\dot{\theta}
-$$
+La implementación utiliza un **observador cinemático de tercer orden**, además de una metodología de primer orden para realizar una comparación entre ambas aproximaciones.
 
-y:
+Estas señales permiten completar el vector de estados requerido por el controlador y estudiar las diferencias entre las distintas metodologías de estimación.
 
-$$
-\dot{\alpha}
-$$
-
-Posteriormente estas señales pueden compararse con las velocidades obtenidas mediante otras metodologías.
-
-La estructura, selección de polos, cálculo de ganancias y análisis del observador se presentan detalladamente en la sección:
-
-**Observador de Estados**
-
----
-
-## 3.19 Evidencias experimentales
-
-Durante la implementación se generaron diferentes evidencias del proceso, incluyendo:
-
-- Arquitectura completa del modelo en Simulink.
-- Subsistema de adquisición de señales.
-- Conversión de cuentas de encoder a ángulos.
-- Construcción del vector de estados.
-- Implementación del controlador LQR.
-- Implementación de los estimadores.
-- Gráficas de estados reales y estimados.
-- Diagramas de Bode.
-- Pruebas experimentales sobre el QUBE-Servo 3.
-
-Las evidencias correspondientes al desempeño del controlador y del observador se presentan principalmente en la sección **Resultados**.
-
----
-
-## 3.20 Resumen de la metodología
-
-La metodología implementada puede dividirse en cinco etapas principales:
-
-### Etapa 1 — Modelado
-
-Obtención de los parámetros físicos, cálculo de inercias y construcción de las matrices del sistema.
-
-### Etapa 2 — Análisis
-
-Evaluación de la controlabilidad y del comportamiento dinámico de la planta.
-
-### Etapa 3 — Adquisición y procesamiento
-
-Lectura de los encoders, conversión de cuentas a posiciones angulares y construcción del vector de estados.
-
-### Etapa 4 — Control
-
-Diseño e implementación del controlador LQR sobre el modelo y posteriormente sobre la plataforma física.
-
-### Etapa 5 — Estimación y validación
-
-Implementación del observador, comparación de señales y análisis experimental de los resultados.
-
-Esta metodología permite establecer una conexión directa entre el modelo matemático, la implementación en Simulink y el comportamiento experimental del sistema físico.
+La estructura, selección de polos, cálculo de ganancias y análisis detallado del observador se presentan en la sección **Observador de Estados**.

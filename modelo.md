@@ -8,7 +8,7 @@ nav_order: 4
 
 ## Variables de estado
 
-El modelo utilizado emplea el vector:
+El modelo utilizado emplea el vector de estados para representar la dinámica de la plataforma Quanser Aero 2:
 
 $$
 x =
@@ -22,56 +22,51 @@ $$
 
 donde:
 
-- $\theta$: posición angular del brazo.
-- $\alpha$: posición angular del péndulo.
-- $\dot{\theta}$: velocidad angular del brazo.
-- $\dot{\alpha}$: velocidad angular del péndulo.
+- $\theta$: posición angular del brazo [rad].
+- $\alpha$: posición angular del péndulo respecto a la vertical [rad].
+- $\dot{\theta}$: velocidad angular del brazo [rad/s].
+- $\dot{\alpha}$: velocidad angular del péndulo [rad/s].
 
 ## Parámetros
 
 | Parámetro | Valor | Descripción |
 |---|---:|---|
 | $R_m$ | 7.5 Ω | Resistencia del motor |
-| $k_t$ | 0.0422 | Constante de torque |
-| $k_m$ | 0.0422 | Constante contraelectromotriz |
-| $m_r$ | 0.095 kg | Masa del brazo |
+| $k_t$ | 0.0422 N·m/A | Constante de torque |
+| $k_m$ | 0.0422 V·s/rad | Constante contraelectromotriz |
+| $m_r$ | 0.095 kg | Masa del brazo rotatorio |
 | $r$ | 0.085 m | Longitud característica del brazo |
-| $b_r$ | $1\times10^{-3}$ | Fricción del brazo |
+| $b_r$ | $1\times10^{-3}$ N·m·s/rad | Amortiguamiento del brazo |
 | $m_p$ | 0.024 kg | Masa del péndulo |
 | $L_p$ | 0.129 m | Longitud del péndulo |
-| $l$ | 0.0645 m | Distancia al centro de masa |
-| $b_p$ | $5\times10^{-5}$ | Fricción del péndulo |
-| $g$ | 9.81 m/s² | Gravedad |
+| $l_{cm}$ | 0.0645 m | Distancia al centro de masa del péndulo |
+| $b_p$ | $5\times10^{-5}$ N·m·s/rad | Amortiguamiento del péndulo |
+| $g$ | 9.81 m/s² | Aceleración de la gravedad |
 
-## Momentos de inercia
+## Momentos de inercia y Acoplamiento
 
-Para el brazo:
-
-$$
-J_r = \frac{m_r r^2}{3}
-$$
-
-obteniéndose:
+Para el brazo rotatorio:
 
 $$
-J_r = 2.2879\times10^{-4}\;kg\,m^2
+J_r = \frac{m_r r^2}{3} = 2.2879\times10^{-4}\;kg\cdot m^2
 $$
 
 Para el péndulo:
 
 $$
-J_p = \frac{m_p L_p^2}{3}
+J_p = \frac{m_p L_p^2}{3} = 1.3313\times10^{-4}\;kg\cdot m^2
 $$
 
-obteniéndose:
+Inercia total acoplada del sistema ($J_t$):
+Este término es fundamental para el cálculo del espacio de estados, ya que representa la interacción física entre las inercias individuales y el centro de masa:
 
 $$
-J_p = 1.3313\times10^{-4}\;kg\,m^2
+J_t = (J_r + m_p r^2)J_p - m_p^2 l_{cm}^2 r^2 = 3.6229\times10^{-8}
 $$
 
 ## Representación en espacio de estados
 
-El modelo linealizado se expresa como:
+El modelo linealizado alrededor de su punto de equilibrio inestable se expresa como:
 
 $$
 \dot{x}=Ax+Bu
@@ -81,7 +76,7 @@ $$
 y=Cx+Du
 $$
 
-La matriz de estados obtenida es:
+Sustituyendo los parámetros físicos y las inercias calculadas, la matriz de dinámica del sistema obtenida es:
 
 $$
 A =
@@ -93,7 +88,7 @@ A =
 \end{bmatrix}
 $$
 
-La matriz de entrada es:
+La matriz de entrada, que relaciona el voltaje del motor ($u$) con las aceleraciones, es:
 
 $$
 B =
@@ -105,13 +100,13 @@ B =
 \end{bmatrix}
 $$
 
-Para el análisis inicial se consideran disponibles los cuatro estados:
+Para el análisis inicial, la matriz de salida asume la disponibilidad de los cuatro estados:
 
 $$
 C = I_4
 $$
 
-y:
+y la matriz de transmisión directa es nula:
 
 $$
 D=
@@ -123,18 +118,8 @@ D=
 \end{bmatrix}
 $$
 
-## Interpretación
+## Interpretación de la Dinámica
 
-Las primeras dos ecuaciones representan la relación cinemática:
-
-$$
-\dot{x}_1=x_3
-$$
-
-$$
-\dot{x}_2=x_4
-$$
-
-Las últimas dos ecuaciones contienen la dinámica acoplada entre el brazo y el péndulo.
-
-El término asociado a $\alpha$ tiene una influencia importante sobre la dinámica, consecuencia de trabajar alrededor del equilibrio invertido.
+*   **Cinemática:** Las primeras dos filas de la matriz $A$ representan la relación cinemática directa ($\dot{x}_1=x_3$ y $\dot{x}_2=x_4$).
+*   **Acoplamiento Inestable:** El valor de $168.5810$ en la matriz $A$ (término $A_{42}$) demuestra una fuerte dependencia de la aceleración del péndulo respecto a su propio ángulo $\alpha$. Al ser un valor positivo de gran magnitud, confirma matemáticamente que el sistema es un péndulo invertido inestable que caerá rápidamente por la gravedad si no se aplica una acción de control.
+*   **Autoridad de Control:** Los valores en la matriz $B$ ($20.6755$ y $20.4351$) indican que el voltaje del motor influye casi en la misma proporción sobre la aceleración del brazo y la del péndulo.

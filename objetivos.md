@@ -7,17 +7,25 @@ permalink: /objetivos/
 
 # Objetivos
 
-## 2.1 Objetivo general
+## Objetivo general
 
-Diseñar, implementar y validar experimentalmente estrategias de **Control Avanzado** sobre la plataforma **QUBE-Servo 3 en configuración de péndulo invertido**, utilizando un controlador **LQR** y un sistema de estimación de estados para mantener la estabilidad del péndulo y analizar el comportamiento dinámico del sistema.
+Diseñar, implementar y validar experimentalmente estrategias de **Control Avanzado** sobre la plataforma **QUBE-Servo 3 en configuración de péndulo invertido**, mediante un controlador **(LQR)** y técnicas de estimación de estados, con el propósito de estabilizar el péndulo alrededor de su posición vertical superior y analizar el comportamiento dinámico del sistema.
 
 ---
 
 ## 2.2 Objetivos específicos
 
-- Obtener el modelo matemático linealizado del QUBE-Servo 3.
+- Obtener el modelo matemático linealizado del **QUBE-Servo 3** en configuración de péndulo invertido.
 
-- Representar el sistema mediante variables de estado.
+- Representar la dinámica del sistema mediante el modelo en **espacio de estados**:
+
+$$
+\dot{x}=Ax+Bu
+$$
+
+$$
+y=Cx+Du
+$$
 
 - Determinar las matrices:
 
@@ -25,48 +33,34 @@ $$
 A,\quad B,\quad C,\quad D
 $$
 
-- Analizar los polos de la planta sin control.
+que describen el comportamiento dinámico de la planta.
 
-- Verificar la controlabilidad del sistema.
+- Analizar los polos de la planta sin control para determinar su comportamiento alrededor del punto de equilibrio vertical.
 
-- Diseñar un **Regulador Cuadrático Lineal (LQR)**.
+- Verificar la **controlabilidad** del sistema mediante la matriz de controlabilidad.
 
-- Seleccionar las matrices de ponderación:
+- Diseñar un **Regulador Cuadrático Lineal (LQR)** para estabilizar el péndulo alrededor de su posición vertical superior.
 
-$$
-Q
-$$
+- Seleccionar las matrices de ponderación ($$Q$$) y ($$R$$). Considerando el compromiso entre el comportamiento de los estados y el esfuerzo de control aplicado al motor.
 
-y
+- Calcular la matriz de ganancias ($$K$$), para implementar la ley de control ($$u=-Kx$$)
 
-$$
-R
-$$
+- Analizar los polos del sistema en lazo cerrado para verificar la estabilidad obtenida mediante el controlador LQR.
 
-- Calcular la matriz de ganancias:
+- Implementar el controlador LQR en **MATLAB y Simulink**.
 
-$$
-K
-$$
+- Validar experimentalmente el funcionamiento del controlador utilizando la plataforma física **QUBE-Servo 3**.
 
-para implementar la ley de control:
+- Procesar las señales obtenidas mediante los encoders para determinar las posiciones angulares ($$\theta$$) y ($$\alpha$$).
 
-$$
-u=-Kx
-$$
+- Obtener o estimar las velocidades angulares ($$\dot{\theta}$$) y ($$\dot{\alpha}$$), necesarias para construir el vector de estados.
 
-- Implementar el controlador LQR en MATLAB y Simulink.
+- Implementar un **observador de tercer orden** para la estimación de posición y velocidad.
 
-- Validar experimentalmente el controlador utilizando la plataforma física QUBE-Servo 3.
+- Determinar los polos y ganancias necesarios para definir la dinámica del observador.
 
-- Implementar un observador o sistema de estimación de estados.
+- Comparar la estimación de velocidades obtenida mediante el observador de tercer orden con una aproximación de primer orden.
 
-- Determinar las ganancias necesarias para el estimador.
+- Analizar el comportamiento de los métodos de estimación tanto en el dominio del tiempo como en el dominio de la frecuencia.
 
-- Comparar los estados medidos o calculados directamente con los estados estimados.
-
-- Analizar diferentes metodologías para la estimación de velocidades angulares.
-
-- Analizar el comportamiento del estimador en el dominio de la frecuencia.
-
-- Documentar y discutir los resultados experimentales obtenidos.
+- Integrar el controlador y los métodos de estimación dentro del modelo desarrollado en Simulink.

@@ -1,11 +1,11 @@
 ---
 layout: default
-title: 6. Resultados
+title: 6. Resultados Experimentales
 nav_order: 7
 permalink: /resultados/
 ---
 
-# Resultados
+# Resultados Experimentales
 
 En esta sección se presentan los principales resultados obtenidos durante el modelado, diseño e implementación del sistema de control para el **QUBE-Servo 3 en configuración de péndulo invertido**.
 

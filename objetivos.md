@@ -13,7 +13,7 @@ Diseñar, implementar y validar experimentalmente estrategias de **Control Avanz
 
 ---
 
-## 2.2 Objetivos específicos
+## Objetivos específicos
 
 - Obtener el modelo matemático linealizado del **QUBE-Servo 3** en configuración de péndulo invertido.
 

@@ -52,7 +52,10 @@ $$
 
 ## Selección de Polos y Cálculo de Ganancias
 
-Para garantizar que el error de estimación converja a cero rápidamente sin desestabilizar la planta, los polos del observador deben ser significativamente más rápidos que la dinámica del controlador LQR (cuyos polos dominantes se ubican en $s \approx -3.27$).
+> **Nota Importante sobre la Regla de Sintonización:**  
+> En el diseño de sistemas de control, existe una regla fundamental: **la dinámica del observador debe ser al menos de 5 a 10 veces más rápida que la del controlador**. Esto garantiza que el error de estimación converja a cero rápidamente y el controlador reciba datos precisos a tiempo. Si el observador fuera más lento, el LQR tomaría decisiones basadas en información atrasada, desestabilizando el péndulo.
+
+Para cumplir rigurosamente con este principio, dado que los polos dominantes del controlador LQR se ubican en $s \approx -3.27$, los polos del observador deben ser significativamente más rápidos (ubicarse mucho más a la izquierda en el semiplano negativo).
 
 Se propuso ubicar los tres polos del observador en:
 
@@ -60,9 +63,17 @@ $$ p_1 = -100, \quad p_2 = -100, \quad p_3 = -100 $$
 
 Al desarrollar el polinomio característico deseado $(s + 100)^3 = 0$ e igualarlo con el polinomio teórico de la matriz $\hat{A}_\theta$, se despejaron algebraicamente las ganancias necesarias mediante MATLAB:
 
-* $l = 30000$
-* $m = -8000000$
-* $\beta = 300$
+$$
+l = 30000
+$$
+
+$$
+m = -8000000
+$$
+
+$$
+\beta = 300
+$$
 
 Estas mismas ganancias se aplicaron de forma simétrica para el subsistema encargado de estimar la velocidad del péndulo ($\hat{\dot{\alpha}}$).
 

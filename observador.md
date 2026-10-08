@@ -45,33 +45,9 @@ $$
 
 Sin embargo, los encoders del QUBE-Servo 3 proporcionan principalmente información de posición.
 
-Las señales:
+Las señales ($$\theta$$) y ($$\alpha$$) pueden obtenerse directamente a partir de las mediciones de los encoders después de convertir las cuentas a unidades angulares.
 
-$$
-\theta
-$$
-
-y:
-
-$$
-\alpha
-$$
-
-pueden obtenerse directamente a partir de las mediciones de los encoders después de convertir las cuentas a unidades angulares.
-
-Por otro lado, las velocidades:
-
-$$
-\dot{\theta}
-$$
-
-y:
-
-$$
-\dot{\alpha}
-$$
-
-requieren un procedimiento adicional de estimación.
+Por otro lado, las velocidades ($$\dot{\theta}$$) y ($$\dot{\alpha}$$) requieren un procedimiento adicional de estimación.
 
 Por esta razón se implementaron diferentes métodos para obtener las velocidades y posteriormente comparar su comportamiento.
 
@@ -127,19 +103,7 @@ Después quitar estos comentarios:
 
 ## 5.3 Observador cinemático de tercer orden
 
-La implementación utilizada no emplea directamente las matrices:
-
-$$
-A
-$$
-
-y:
-
-$$
-B
-$$
-
-del modelo completo de la planta.
+La implementación utilizada no emplea directamente las matrices ($$A$$) y ($$B$$) del modelo completo de la planta.
 
 En su lugar se utiliza una estructura cinemática local de tercer orden para cada variable angular.
 
@@ -151,36 +115,12 @@ $$
 
 donde:
 
-- $x_o$ representa los estados internos del observador.
-- $y$ representa la posición angular medida.
-- $A_{kin}$ representa la dinámica interna del estimador.
-- $B_{kin}$ representa la influencia de la medición sobre el observador.
+- ($x_o$) Representa los estados internos del observador.
+- ($y$) Representa la posición angular medida.
+- ($A_{kin}$) Representa la dinámica interna del estimador.
+- ($B_{kin}$) Representa la influencia de la medición sobre el observador.
 
-Las salidas permiten obtener:
-
-$$
-\hat{\theta}
-$$
-
-y:
-
-$$
-\hat{\dot{\theta}}
-$$
-
-para el brazo, así como:
-
-$$
-\hat{\alpha}
-$$
-
-y:
-
-$$
-\hat{\dot{\alpha}}
-$$
-
-para el péndulo.
+Las salidas permiten obtener ($$\hat{\theta}$$) y ($$\hat{\dot{\theta}}$$) para el brazo, así como ($$\hat{\alpha}$$) y ($$\hat{\dot{\alpha}}$$) para el péndulo.
 
 ---
 
@@ -213,10 +153,13 @@ polos_alpha = [-100,-100,-100];
 
 La intención es que la dinámica del estimador sea más rápida que la dinámica del sistema controlado.
 
-Un observador rápido permite que el error entre la señal real y la estimada disminuya rápidamente.
+Un observador rápido permite que el error entre la señal real y la estimada disminuya rápidamente. Sin embargo, una dinámica excesivamente rápida también puede incrementar la sensibilidad al ruido, por lo que la selección de polos debe evaluarse experimentalmente.
 
-Sin embargo, una dinámica excesivamente rápida también puede incrementar la sensibilidad al ruido, por lo que la selección de polos debe evaluarse experimentalmente.
+Una vez construida la matriz del observador, la ubicación real de los polos se verificó mediante:
 
+```matlab
+polos_obs_calculados = eig(A_theta);
+```
 ---
 
 ## 5.5 Polinomio característico
@@ -455,39 +398,14 @@ D_kin = [0;
          0];
 ```
 
-La primera salida corresponde a la posición estimada:
-
-$$
-\hat{\theta}
-$$
-
-o:
-
-$$
-\hat{\alpha}
-$$
-
-mientras que la segunda corresponde a la velocidad estimada:
-
-$$
-\hat{\dot{\theta}}
-$$
-
-o:
-
-$$
-\hat{\dot{\alpha}}
-$$
+La primera salida corresponde a la posición estimada ($$\hat{\theta}
+$$) o ($$\hat{\alpha}$$), mientras que la segunda corresponde a la velocidad estimada ($$\hat{\dot{\theta}}$$) o ($$\hat{\dot{\alpha}}$$).
 
 ---
 
 ## 5.10 Observador de tercer orden para theta
 
-Para la posición angular del brazo se utiliza como entrada la medición:
-
-$$
-\theta
-$$
+Para la posición angular del brazo se utiliza como entrada la medición ($$\theta$$).
 
 El subsistema procesa esta señal utilizando las ganancias:
 
@@ -497,52 +415,19 @@ m,\qquad
 \beta
 $$
 
-y produce principalmente:
+Internamente, la estructura genera una estimación de posición ($\hat{\theta}$) y una estimación de velocidad ($\hat{\dot{\theta}}$).
 
-$$
-\hat{\theta}
-$$
+En la implementación de Simulink, la señal utilizada como salida del subsistema es principalmente ($$\hat{\dot{\theta}}$$)
 
-y:
+![Observador de tercer orden para theta]({{ site.baseurl }}/assets/images/obs3.png)
 
-$$
-\hat{\dot{\theta}}
-$$
-
-La velocidad estimada:
-
-$$
-\hat{\dot{\theta}}
-$$
-
-puede utilizarse posteriormente para compararla con otras metodologías de obtención de velocidad.
-
-<!--
-IMAGEN PENDIENTE
-
-Esta es la captura ampliada del observador de tercer orden
-correspondiente a theta.
-
-Nombre sugerido:
-
-assets/images/observador_theta_3orden.png
-
-Después quitar estos comentarios:
-
-![Observador de tercer orden para theta]({{ site.baseurl }}/assets/images/observador_theta_3orden.png)
-
-*Figura 2. Implementación en Simulink del observador cinemático de tercer orden para la posición y velocidad del brazo.*
--->
+*Figura 1. Implementación en Simulink del observador cinemático de tercer orden para la estimación de la velocidad angular del brazo.*
 
 ---
 
 ## 5.11 Observador de tercer orden para alpha
 
-De manera equivalente, para el péndulo se utiliza como entrada:
-
-$$
-\alpha
-$$
+De manera equivalente, para el péndulo se utiliza como entrada ($$\alpha$$).
 
 El observador emplea las ganancias:
 
@@ -552,42 +437,13 @@ m_1,\qquad
 \beta_1
 $$
 
-y genera:
+Internamente se obtiene una estimación de posición ($\hat{\alpha}$) y una estimación de velocidad ($\hat{\dot{\alpha}}$).
 
-$$
-\hat{\alpha}
-$$
+En la implementación de Simulink, la señal utilizada como salida del subsistema es ($$\hat{\dot{\alpha}}$$).
 
-y:
+![Observador de tercer orden para alpha]({{ site.baseurl }}/assets/images/obs2.png)
 
-$$
-\hat{\dot{\alpha}}
-$$
-
-La velocidad estimada:
-
-$$
-\hat{\dot{\alpha}}
-$$
-
-representa una de las señales principales para evaluar el desempeño del estimador.
-
-<!--
-IMAGEN PENDIENTE
-
-Esta es la captura ampliada del observador de tercer orden
-correspondiente a alpha.
-
-Nombre sugerido:
-
-assets/images/observador_alpha_3orden.png
-
-Después quitar estos comentarios:
-
-![Observador de tercer orden para alpha]({{ site.baseurl }}/assets/images/observador_alpha_3orden.png)
-
-*Figura 3. Implementación en Simulink del observador cinemático de tercer orden para la posición y velocidad del péndulo.*
--->
+*Figura 2. Implementación en Simulink del observador cinemático de tercer orden para la estimación de la velocidad angular del péndulo.*
 
 ---
 
@@ -704,27 +560,7 @@ El diagrama permite analizar:
 - Comportamiento de la velocidad estimada.
 - Respuesta ante diferentes frecuencias.
 
-La implementación actual muestra la frecuencia en:
-
-$$
-rad/s
-$$
-
-<!--
-IMAGEN PENDIENTE
-
-Generar o utilizar la gráfica Bode del observador.
-
-Nombre sugerido:
-
-assets/images/bode_observador_3orden.png
-
-Después quitar estos comentarios:
-
-![Bode del observador de tercer orden]({{ site.baseurl }}/assets/images/bode_observador_3orden.png)
-
-*Figura 5. Respuesta en frecuencia del observador cinemático de tercer orden.*
--->
+La implementación actual muestra la frecuencia en ($$rad/s$$).
 
 ---
 
@@ -787,33 +623,14 @@ Derivador ideal
 
 El objetivo de esta comparación es estudiar cómo cada metodología aproxima la operación de derivación en función de la frecuencia.
 
-<!--
-IMAGEN PENDIENTE
-
-Utilizar la gráfica donde se comparan:
-- Observador 3er orden
-- Filtro 1er orden
-- Derivador puro
-
-Nombre sugerido:
-
-assets/images/bode_comparacion_estimadores.png
-
-Después quitar estos comentarios:
-
-![Comparación de estimadores]({{ site.baseurl }}/assets/images/bode_comparacion_estimadores.png)
-
-*Figura 6. Comparación en frecuencia entre el observador de tercer orden, el filtro de primer orden y el derivador ideal.*
--->
-
 ---
 
 ## 5.16 Relación con el controlador LQR
 
-Las velocidades estimadas pueden utilizarse para completar el vector:
+Las estimaciones permiten construir un segundo vector de estados:
 
 $$
-\hat{x}=
+X_1=
 \begin{bmatrix}
 \theta\\
 \alpha\\
@@ -822,30 +639,9 @@ $$
 \end{bmatrix}
 $$
 
-y analizar su aplicación dentro de la realimentación del sistema.
+Este vector permite comparar la reconstrucción obtenida mediante el observador de tercer orden con el vector construido a partir de los derivadores filtrados de primer orden.
 
-De manera conceptual:
-
-```text
-θ ────────────────┐
-                  │
-α ────────────────┤
-                  │
-Observador θ ─→ θ̇_hat
-                  │
-Observador α ─→ α̇_hat
-                  │
-                  ↓
-               x_hat
-                  ↓
-                -K
-                  ↓
-                  u
-                  ↓
-              QUBE-Servo 3
-```
-
-Esta arquitectura permite estudiar el comportamiento del controlador cuando algunas variables son obtenidas mediante estimación.
+Además, proporciona la estructura necesaria para analizar el uso de estados estimados dentro de una ley de control de la forma ($$u=-K\hat{x}$$).
 
 ---
 
@@ -853,49 +649,17 @@ Esta arquitectura permite estudiar el comportamiento del controlador cuando algu
 
 El procedimiento general utilizado para implementar los estimadores fue:
 
-1. Obtener las posiciones:
-
-$$
-\theta
-$$
-
-y:
-
-$$
-\alpha
-$$
-
-a partir de los encoders.
+1. Obtener las posiciones ($$\theta$$) y ($$\alpha$$) a partir de los encoders.
 
 2. Seleccionar los polos del observador.
 
 3. Calcular los polinomios característicos.
 
-4. Obtener las ganancias:
-
-$$
-l,\quad m,\quad\beta
-$$
-
-y:
-
-$$
-l_1,\quad m_1,\quad\beta_1
-$$
+4. Obtener las ganancias ($$l,\quad m,\quad\beta$$) y ($$l_1,\quad m_1,\quad\beta_1$$)
 
 5. Implementar los subsistemas de tercer orden en Simulink.
 
-6. Obtener las velocidades estimadas:
-
-$$
-\hat{\dot{\theta}}
-$$
-
-y:
-
-$$
-\hat{\dot{\alpha}}
-$$
+6. Obtener las velocidades estimadas ($$\hat{\dot{\theta}}$$) y ($$\hat{\dot{\alpha}}$$)
 
 7. Implementar el estimador de primer orden.
 
@@ -950,25 +714,6 @@ Estas señales permiten evaluar:
 - Sensibilidad al ruido.
 - Diferencia entre métodos.
 - Comportamiento dinámico.
-
-Las gráficas correspondientes se presentan en la sección **Resultados**.
-
----
-
-## 5.19 Evidencias contempladas
-
-Para documentar esta etapa se incorporarán posteriormente:
-
-- Subsistema general `State X`.
-- Observador de tercer orden para $\theta$.
-- Observador de tercer orden para $\alpha$.
-- Gráfica de posición medida y estimada.
-- Gráfica de velocidad estimada.
-- Diagrama de Bode del observador.
-- Comparación del observador de tercer orden con el filtro de primer orden.
-- Comparación con el derivador ideal.
-
-Las evidencias cuantitativas principales se presentarán en la sección **Resultados**.
 
 ---
 

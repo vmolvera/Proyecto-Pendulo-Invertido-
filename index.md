@@ -118,6 +118,24 @@ El flujo general implementado en el sistema es:
 ```
 ---
 
+
+## Video de la prueba experimental
+
+<video controls width="100%" preload="metadata">
+  <source src="{{ site.baseurl }}/assets/videos/video-4211.mp4" type="video/mp4">
+  Tu navegador no soporta video HTML5.
+</video>
+
+<video controls width="100%" preload="metadata">
+  <source src="{{ site.baseurl }}/assets/videos/video-4212.mp4" type="video/mp4">
+  Tu navegador no soporta video HTML5.
+</video>
+
+<video controls width="100%" preload="metadata">
+  <source src="{{ site.baseurl }}/assets/videos/video-4214.mp4" type="video/mp4">
+  Tu navegador no soporta video HTML5.
+</video>
+
 ## Integrantes
 
 - Víctor Manuel Olvera de la Cruz

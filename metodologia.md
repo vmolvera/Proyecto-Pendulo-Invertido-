@@ -596,6 +596,20 @@ Durante las pruebas experimentales, el péndulo se lleva manualmente hasta una r
 
 Una vez dentro de esta zona de operación, el controlador comienza a generar movimientos correctivos del brazo con el objetivo de mantener el equilibrio.
 
+La habilitación del controlador se implementó mediante una función que verifica si el péndulo se encuentra dentro de la región cercana a la vertical:
+
+```matlab
+function y = fcn(u)
+
+if abs(u) <= 0.175
+    y = 1;
+else
+    y = 0;
+end
+
+end
+```
+
 ---
 
 ## 3.17 Integración del sistema de estimación

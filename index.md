@@ -121,20 +121,21 @@ El flujo general implementado en el sistema es:
 
 ## Video de la prueba experimental
 
-<video controls width="100%" preload="metadata">
-  <source src="{{ site.baseurl }}/assets/videos/video-4211.mp4" type="video/mp4">
-  Tu navegador no soporta video HTML5.
-</video>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem;">
 
-<video controls width="100%" preload="metadata">
-  <source src="{{ site.baseurl }}/assets/videos/video-4212.mp4" type="video/mp4">
-  Tu navegador no soporta video HTML5.
-</video>
+  <video controls preload="metadata" style="width:100%;border-radius:8px;">
+    <source src="{{ site.baseurl }}/assets/videos/video-4211.mp4" type="video/mp4">
+  </video>
 
-<video controls width="100%" preload="metadata">
-  <source src="{{ site.baseurl }}/assets/videos/video-4214.mp4" type="video/mp4">
-  Tu navegador no soporta video HTML5.
-</video>
+  <video controls preload="metadata" style="width:100%;border-radius:8px;">
+    <source src="{{ site.baseurl }}/assets/videos/video-4212.mp4" type="video/mp4">
+  </video>
+
+  <video controls preload="metadata" style="width:100%;border-radius:8px;">
+    <source src="{{ site.baseurl }}/assets/videos/video-4214.mp4" type="video/mp4">
+  </video>
+
+</div>
 
 ## Integrantes
 

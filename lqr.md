@@ -388,9 +388,19 @@ No se implementa una estrategia no lineal de *swing-up* basada en energía.
 
 Por esta razón, durante las pruebas el péndulo debe llevarse manualmente hacia una región cercana a la posición vertical superior.
 
-La especificación del proyecto considera una zona de operación aproximadamente de ($$\pm10^\circ$$) alrededor de la vertical.
+La habilitación del proyecto considera una zona de operación aproximadamente de     ($$0.175\;rad$$) alrededor de la vertical, equivalente a ($$\pm10^\circ$$) .
 
 Una vez que el péndulo entra en esta región, el controlador comienza a generar acciones correctivas para mantenerlo estable.
+
+```text
+function y = fcn(u)
+if abs(u) <= 0.175
+    y=1;
+else
+    y=0;
+end
+end
+```
 
 ---
 

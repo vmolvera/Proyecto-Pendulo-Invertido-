@@ -35,6 +35,10 @@ Quanser. (2024).
 *Qube-Servo 3 User Manual: Setup and Configuration*.  
 Versión 1.1, 1 de septiembre de 2024.
 
+Documento en repositorio:
+
+[https://github.com/quanser/Quanser_Academic_Resources/blob/dev-windows/3_user_manuals/qube_servo3/Qube_Servo3_user_manual.pdf](https://github.com/quanser/Quanser_Academic_Resources/blob/dev-windows/3_user_manuals/qube_servo3/Qube_Servo3_user_manual.pdf)
+
 Este manual fue utilizado como referencia para comprender:
 
 - La arquitectura de la plataforma.
@@ -47,16 +51,16 @@ Este manual fue utilizado como referencia para comprender:
 
 ---
 
-## 9.3 Plataforma QUBE-Servo 3
+## 9.3 Recursos Académicos - QUBE-Servo 3
 
 Quanser.  
-*Qube-Servo 3*.
+*Quanser Academic Resources*.
 
-Sitio oficial:
+Repositorio de recursos (GitHub):
 
-[https://www.quanser.com/products/qube-servo-3/](https://www.quanser.com/products/qube-servo-3/)
+[https://github.com/quanser/Quanser_Academic_Resources/tree/dev-windows](https://github.com/quanser/Quanser_Academic_Resources/tree/dev-windows)
 
-La documentación oficial de Quanser presenta las características generales de la plataforma, así como aplicaciones relacionadas con:
+Los recursos y la documentación oficial del repositorio de Quanser presentan las características generales de la plataforma, así como aplicaciones y modelos de Simulink relacionados con:
 
 - Modelado en espacio de estados.
 - Estabilidad.

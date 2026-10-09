@@ -110,7 +110,7 @@ En su lugar se utiliza una estructura cinemática local de tercer orden para cad
 El modelo general utilizado puede escribirse como:
 
 $$
-\dot{x}_o=A_{kin}x_o+B_{kin}y
+\dot{x}_o=A_{gorro}x_o+B_{gorro}y
 $$
 
 donde:

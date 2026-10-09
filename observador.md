@@ -473,22 +473,9 @@ De forma conceptual:
 
 Esta arquitectura permite obtener simultáneamente las velocidades mediante diferentes metodologías y compararlas durante las pruebas.
 
-<!--
-IMAGEN PENDIENTE OPCIONAL
+![Integración de estimadores en State X]({{ site.baseurl }}/assets/images/estadox.png)
 
-Si no se utiliza ya en Metodología, aquí puede colocarse la
-captura completa de State X.
-
-Nombre sugerido:
-
-assets/images/state_x_completo.png
-
-Después activar:
-
-![Integración de estimadores en State X]({{ site.baseurl }}/assets/images/state_x_completo.png)
-
-*Figura 4. Integración de los diferentes métodos de estimación dentro del subsistema State X.*
--->
+*Figura 3. Integración de los diferentes métodos de estimación dentro del subsistema State X.*
 
 ---
 
@@ -562,6 +549,13 @@ El diagrama permite analizar:
 
 La implementación actual muestra la frecuencia en ($$rad/s$$).
 
+![Respuesta en frecuencia del observador]({{ site.baseurl }}/assets/images/bode_obs.jpg)
+
+*Figura 4: Respuesta en frecuencia del sistema de múltiples salidas del observador cinemático: posición estimada y velocidad estimada.*
+
+- Al interpretar este diagrama, se comprueba el correcto funcionamiento del observador: Posición Medida $\rightarrow$ Posición Estimada (Dos gráficas superiores): En bajas frecuencias, la magnitud se mantiene plana en $0$ dB (ganancia de $1$) y la fase en $0^\circ$. Esto demuestra que el observador rastrea y copia la posición real del encoder a la perfección. En altas frecuencias, la magnitud decae, confirmando que el bloque también actúa como un filtro pasa-bajas que limpia la señal de posición antes de usarla.
+- Posición Medida $\rightarrow$ Velocidad Estimada (Dos gráficas inferiores): Confirma el comportamiento derivativo necesario a bajas frecuencias (comenzando con un aumento de magnitud y una fase de $+90^\circ$) acoplado a un filtro de atenuación en alta frecuencia. Esto comprueba que la sintonización del observador fue un éxito y la señal enviada al controlador LQR está libre de picos de ruido.
+
 ---
 
 ## 5.15 Comparación con estimador de primer orden
@@ -601,14 +595,7 @@ obs_3er_orden_vel = sys_observador(2,1);
 Posteriormente se comparan:
 
 ```matlab
-bode( ...
-    obs_3er_orden_vel, ...
-    'b', ...
-    filtro_1er_orden, ...
-    'r--', ...
-    opciones_bode, ...
-    derivador_puro, ...
-    'g--');
+bode(obs_3er_orden_vel, 'b', filtro_1er_orden, 'r--', derivador_puro, 'g-.', opciones_bode);
 ```
 
 De esta forma se analizan simultáneamente:
@@ -622,6 +609,14 @@ Derivador ideal
 ```
 
 El objetivo de esta comparación es estudiar cómo cada metodología aproxima la operación de derivación en función de la frecuencia.
+
+![Comparativa de métodos de estimación]({{ site.baseurl }}/assets/images/image_266036.png)
+
+*Figura 5: Diagrama de Bode comparando la respuesta en frecuencia de la derivada pura (línea verde), el filtro de primer orden (línea roja) y el observador de tercer orden (línea azul).*
+
+Esta gráfica sirve como evidencia matemática visual de la superioridad del observador propuesto frente a los métodos tradicionales:
+- Análisis de Magnitud (Gráfica superior): La línea verde (derivador puro) crece indefinidamente con la frecuencia. En la práctica física, esto significa que amplificaría el ruido del sensor al infinito, lo cual es destructivo para el motor. A bajas frecuencias (movimientos físicos reales), tanto el filtro como el observador logran seguir esta trayectoria diagonal. Sin embargo, en altas frecuencias (ruido eléctrico), el filtro de 1er orden simplemente se estanca de forma horizontal amplificando el ruido, mientras que el observador de 3er orden crea una caída o atenuación pronunciada bloqueando el ruido agresivamente.
+- Análisis de Fase (Gráfica inferior): El derivador ideal mantiene una fase constante de $+90^\circ$. El filtro de 1er orden se desvía de la fase ideal muy temprano, lo que significa que introduce un retardo de tiempo perjudicial en la señal (si la velocidad estimada llega tarde al LQR, el péndulo podría caerse). En cambio, el observador de 3er orden se mantiene mucho más cerca de los $+90^\circ$ ideales durante un rango de frecuencias más amplio, garantizando que la estimación de velocidad se entrega a tiempo.
 
 ---
 

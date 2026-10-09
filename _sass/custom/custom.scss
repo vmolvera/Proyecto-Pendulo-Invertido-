@@ -746,6 +746,26 @@ h4:hover .anchor-heading {
 }
 
 
+/*BOTONES DE DESCARGA */
+
+.btn-descarga {
+  background-color: #EAEAEA !important; /* Gris muy bajito y limpio */
+  border-color: #EAEAEA !important;
+  color: #231F20 !important; /* Letra oscura (negro Ibero) para que sea estética */
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.btn-descarga:hover {
+  background-color: #FFC1C1 !important; /* Rojo bajito/pastel al pasar el cursor */
+  border-color: #FFC1C1 !important;
+  color: #231F20 !important; /* La letra se mantiene oscura */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Sombra muy sutil */
+}
+
+
 /* =========================================================
    FOOTER GENERAL
    ========================================================= */

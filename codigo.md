@@ -36,7 +36,7 @@ Comparación de estimadores
 El archivo principal utilizado es:
 
 ```text
-obslqr.m
+pendulo.m
 ```
 
 ---
@@ -204,10 +204,10 @@ Los valores obtenidos se muestran mediante:
 
 ```matlab
 disp(' ')
-disp('Matriz A =')
+disp('Matriz A:')
 disp(A)
 
-disp('Matriz B =')
+disp('Matriz B:')
 disp(B)
 ```
 
@@ -447,33 +447,33 @@ La estructura cinemática de tercer orden se representa mediante:
 % 4. MATRICES DEL OBSERVADOR
 % ESTRUCTURA CINEMATICA
 
-A_kin_theta = [ 0,  1,      0;
-               -l,  0,      m;
-               -1,  0, -beta];
+A_gorro = [ 0,  1,      0;
+           -l,  0,      m;
+           -1,  0, -beta];
 
-B_kin_theta = [0;
-               l;
-               1];
+B_gorro = [0;
+           l;
+           1];
 ```
 
 Para extraer posición y velocidad estimadas se utilizan:
 
 ```matlab
-C_kin = [1, 0, 0;    % Posicion estimada
-         0, 1, 0];   % Velocidad estimada
+C_gorro = [1, 0, 0;  
+           0, 1, 0]; 
 
-D_kin = [0;
+D_gorro = [0;
          0];
 ```
 
 Las matrices también pueden visualizarse en la consola:
 
 ```matlab
-disp('Matriz A del Observador Cinematico (A_kin) =')
-disp(A_kin_theta)
+disp('Matriz A del Observador Cinematico (A_gorro) =')
+disp(A_gorro)
 
-disp('Matriz B del Observador Cinematico (B_kin) =')
-disp(B_kin_theta)
+disp('Matriz B del Observador Cinematico (B_gorro) =')
+disp(B_gorro)
 ```
 
 ---
@@ -484,10 +484,10 @@ El sistema correspondiente al observador se construye mediante:
 
 ```matlab
 sys_observador = ss( ...
-    A_kin_theta, ...
-    B_kin_theta, ...
-    C_kin, ...
-    D_kin);
+    A_gorro, ...
+    B_gorro, ...
+    C_gorro, ...
+    D_gorro);
 ```
 
 Posteriormente se asignan nombres a sus entradas y salidas:
@@ -528,7 +528,6 @@ title( ...
     'Diagrama de Bode del Observador Cinematico (Frecuencia en rad)');
 ```
 
-> **Nota:** en algunos comentarios del archivo original se menciona "Hz", pero la configuración actual del programa utiliza explícitamente `FreqUnits = 'rad/s'`.
 
 ---
 
@@ -580,24 +579,13 @@ obs_3er_orden_vel = sys_observador(2,1);
 La comparación completa se genera mediante:
 
 ```matlab
-figure( ...
-    'Name', ...
-    'Comparativa de Estimacion de Velocidad');
+figure('Name', 'Comparativa de Estimacion de Velocidad');
 
-bode( ...
-    obs_3er_orden_vel, ...
-    'b', ...
-    filtro_1er_orden, ...
-    'r--', ...
-    opciones_bode, ...
-    derivador_puro, ...
-    'g--');
+bode( bode(obs_3er_orden_vel, 'b', filtro_1er_orden, 'r--', derivador_puro, 'g-.', opciones_bode);
 
-title( ...
-    'Estimacion de Velocidad: 3er Orden vs Filtro 1er Orden');
+title( 'Estimacion de Velocidad: 3er Orden vs Filtro 1er Orden');
 
-legend( ...
-    'Observador Cinemático (3er Orden)', ...
+legend('Observador Cinemático (3er Orden)', ...
     'Filtro Simple (1er Orden)', ...
     'Location', ...
     'SouthWest');
@@ -609,7 +597,7 @@ Esta comparación permite estudiar la respuesta del observador de tercer orden f
 
 # Código completo
 
-## 7.21 Archivo `obslqr.m`
+## 7.21 Archivo `pendulo.m`
 
 A continuación se presenta el código completo utilizado para el modelado, diseño del LQR y análisis del observador.
 
@@ -686,10 +674,10 @@ C = eye(4);
 D = zeros(4,1);
 
 disp(' ')
-disp('Matriz A =')
+disp('Matriz A:')
 disp(A)
 
-disp('Matriz B =')
+disp('Matriz B:')
 disp(B)
 
 %% CONTROLABILIDAD
@@ -757,10 +745,6 @@ else
 end
 
 %% OBSERVADORES CINEMATICOS DE TERCER ORDEN (SIMULINK)
-% Este observador no utiliza las matrices de la planta (A, B).
-% Es un diferenciador de tercer orden que funciona como un
-% modelo cinematico local para cada variable.
-
 %% 1. DEFINICION DE POLOS PARA LOS OBSERVADORES
 % Los polos deben ser mas rapidos que la dinamica del LQR.
 
@@ -786,9 +770,9 @@ l1 = poly_alpha(3);
 
 m1 = poly_alpha(4) - (l1 * beta1);
 
-fprintf('GANANCIAS DE LOS OBSERVADORES CINEMATICOS\n')
+fprintf('GANANCIAS DE LOS OBSERVADORES\n')
 
-fprintf('Subsistema Theta:\n')
+fprintf('Theta:\n')
 
 fprintf('l = %.4f \n', l);
 
@@ -796,7 +780,7 @@ fprintf('m = %.4f \n', m);
 
 fprintf('beta = %.4f \n\n', beta);
 
-fprintf('Subsistema Alpha:\n')
+fprintf('Alpha:\n')
 
 fprintf('l1 = %.4f \n', l1);
 
@@ -805,38 +789,37 @@ fprintf('m1 = %.4f \n', m1);
 fprintf('beta1 = %.4f \n\n', beta1);
 
 %% 4. MATRICES DEL OBSERVADOR
-% Estructura cinematica de tercer orden
 
-A_kin_theta = [ 0,  1,      0;
-               -l,  0,      m;
-               -1,  0, -beta];
+A_gorro = [ 0,  1,      0;
+           -l,  0,      m;
+           -1,  0, -beta];
 
-B_kin_theta = [0;
-               l;
-               1];
+B_gorro = [0;
+           l;
+           1];
 
 % Matriz C para extraer posicion y velocidad estimadas
-C_kin = [1, 0, 0;
-         0, 1, 0];
+C_gorro = [1, 0, 0;
+           0, 1, 0];
 
-D_kin = [0;
-         0];
+D_gorro = [0;
+           0];
 
-disp('Matriz A del Observador Cinematico (A_kin) =')
+disp('Matriz A del Observador Cinematico (A_gorro):')
 
-disp(A_kin_theta)
+disp(A_gorro)
 
-disp('Matriz B del Observador Cinematico (B_kin) =')
+disp('Matriz B del Observador Cinematico (B_gorro):')
 
-disp(B_kin_theta)
+disp(B_gorro)
 
 %% ANALISIS EN FRECUENCIA DEL OBSERVADOR
 
 sys_observador = ss( ...
-    A_kin_theta, ...
-    B_kin_theta, ...
-    C_kin, ...
-    D_kin);
+    A_gorro, ...
+    B_gorro, ...
+    C_gorro, ...
+    D_gorro);
 
 sys_observador.OutputName = { ...
     'Posicion Estimada', ...
@@ -860,19 +843,23 @@ bode(sys_observador, opciones_bode);
 title( ...
     'Diagrama de Bode del Observador Cinematico (Frecuencia en rad)');
 
-%% ================================================================
-% COMPARACION DE BODE:
-% OBSERVADOR 3ER ORDEN VS FILTRO 1ER ORDEN
-% ================================================================
+% COMPARACION DE BODE: OBSERVADOR 3ER ORDEN VS FILTRO 1ER ORDEN VS S
+
+% 1. Definir la funcion de transferencia de primer orden
 
 s = tf('s');
 
-filtro_1er_orden = (50*s)/(s + 50);
+filtro_1er_orden = (50*s) / (s + 50);
+
+% 2. Extraer la respuesta de velocidad del observador de 3er orden
+
+obs_3er_orden_vel = sys_observador(2,1); 
+
+% 3. Definir la funcion de transferencia s
 
 derivador_puro = s;
 
-% Salida 2 del observador = velocidad estimada
-obs_3er_orden_vel = sys_observador(2,1);
+% 4. Configurar opciones del Bode en Radianes
 
 opciones_bode = bodeoptions('cstprefs');
 
@@ -880,34 +867,23 @@ opciones_bode.FreqUnits = 'rad/s';
 
 opciones_bode.Grid = 'on';
 
-figure( ...
-    'Name', ...
-    'Comparativa de Estimacion de Velocidad');
+% 5. Graficar las metodologias para comprobar respuestas
 
-bode( ...
-    obs_3er_orden_vel, ...
-    'b', ...
-    filtro_1er_orden, ...
-    'r--', ...
-    opciones_bode, ...
-    derivador_puro, ...
-    'g--');
+figure('Name', 'Comparativa de Estimacion de Velocidad');
 
-title( ...
-    'Estimacion de Velocidad: 3er Orden vs Filtro 1er Orden');
+bode(obs_3er_orden_vel, 'b', filtro_1er_orden, 'r--', derivador_puro, 'g-.', opciones_bode);
 
-legend( ...
-    'Observador Cinemático (3er Orden)', ...
-    'Filtro Simple (1er Orden)', ...
-    'Location', ...
-    'SouthWest');
+title('Estimacion de Velocidad: 3er Orden vs Filtro 1er Orden vs S');
+
+legend('Observador 3er Orden', 'Filtro 1er Orden', 'Derivador Puro (s)', 'Location', 'SouthWest');
+
 ```
 
 ---
 
 ## 7.22 Relación entre MATLAB y Simulink
 
-El archivo `obslqr.m` genera las variables necesarias para utilizar posteriormente el modelo de Simulink.
+El archivo `pendulo.m` genera las variables necesarias para utilizar posteriormente el modelo de Simulink.
 
 Entre las variables principales se encuentran:
 
@@ -940,7 +916,7 @@ Estas variables quedan disponibles en el **Workspace de MATLAB** y pueden ser ut
 La secuencia de trabajo es:
 
 ```text
-Ejecutar obslqr.m
+Ejecutar pendulo.m
         ↓
 Crear variables en Workspace
         ↓
@@ -966,9 +942,9 @@ La estructura recomendada del repositorio para el código es:
 ```text
 Proyecto-Pendulo-Invertido-/
 │
-├── obslqr.m
+├── pendulo.m
 │
-├── modelo_simulink.slx
+├── obs.slx
 │
 ├── index.md
 ├── introduccion.md
@@ -984,8 +960,6 @@ Proyecto-Pendulo-Invertido-/
     └── images/
 ```
 
-El nombre del archivo `.slx` deberá sustituirse por el nombre real utilizado por el equipo.
-
 ---
 
 ## 7.24 Ejecución del programa
@@ -997,7 +971,7 @@ Para ejecutar el sistema se utiliza el siguiente procedimiento:
         ↓
 2. Abrir la carpeta del proyecto
         ↓
-3. Ejecutar obslqr.m
+3. Ejecutar pendulo.m
         ↓
 4. Verificar parámetros y matrices
         ↓

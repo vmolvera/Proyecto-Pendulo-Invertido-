@@ -610,7 +610,7 @@ Derivador ideal
 
 El objetivo de esta comparación es estudiar cómo cada metodología aproxima la operación de derivación en función de la frecuencia.
 
-![Comparativa de métodos de estimación]({{ site.baseurl }}/assets/images/image_266036.png)
+![Comparativa de métodos de estimación]({{ site.baseurl }}/assets/images/velocidad_comp.jpg)
 
 *Figura 5: Diagrama de Bode comparando la respuesta en frecuencia de la derivada pura (línea verde), el filtro de primer orden (línea roja) y el observador de tercer orden (línea azul).*
 

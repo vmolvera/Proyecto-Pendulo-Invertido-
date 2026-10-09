@@ -7,11 +7,6 @@ permalink: /codigo/
 
 # Código Fuente
 
-## Descarga de Archivos
-
-[Descargar pendulo.m]({{ site.baseurl }}/pendulo.m){: .btn .btn-primary }
-[Descargar obs.slx]({{ site.baseurl }}/obs.slx){: .btn .btn-purple }
-
 En esta sección se presenta el código principal desarrollado en **MATLAB** para el modelado, análisis y diseño del sistema de control del péndulo invertido utilizando el **QUBE-Servo 3**.
 
 El programa integra en un mismo archivo las etapas principales del proyecto:
@@ -43,6 +38,12 @@ El archivo principal utilizado es:
 ```text
 pendulo.m
 ```
+---
+
+## Descarga de Archivos
+
+[Descargar pendulo.m]({{ site.baseurl }}/pendulo.m){: .btn .btn-descarga }
+[Descargar obs.slx]({{ site.baseurl }}/obs.slx){: .btn .btn-descarga }
 
 ---
 

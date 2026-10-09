@@ -27,6 +27,15 @@ La arquitectura implementada en **MATLAB y Simulink** validó el flujo de trabaj
 
 El bloque de saturación comprobó ser una medida de seguridad vital para proteger el hardware, mientras que la lógica de habilitación por zonas (exclusiva para la región de balance) demostró que el modelo linealizado es extremadamente preciso siempre y cuando el sistema opere cerca de su punto de equilibrio.
 
+## Mejoras a futuro
+
+A partir de la experiencia y los resultados obtenidos en este proyecto, se identifican las siguientes áreas de oportunidad para expandir y perfeccionar el desempeño del sistema:
+
+1. **Estrategia de *Swing-Up* autónomo:** Actualmente, el controlador LQR opera de manera local en la región de balance ($\pm10^\circ$). La implementación de un controlador no lineal basado en energía permitiría levantar el péndulo automáticamente desde su posición de reposo estable (colgando hacia abajo) hasta la zona de captura del LQR, logrando una operación completamente autónoma de inicio a fin.
+2. **Implementación de Filtro de Kalman:** Aunque el observador de tercer orden superó con creces al filtro tradicional, la transición hacia un Filtro de Kalman (estimador óptimo estocástico) representaría una mejora natural. Esto permitiría modelar explícitamente el ruido estadístico de los encoders y las perturbaciones no medidas del entorno.
+3. **Control Robusto con Acción Integral (LQI):** Para mejorar el rechazo a perturbaciones externas constantes y eliminar posibles pequeños errores en estado estacionario (como derivas lentas provocadas por asimetrías de la mesa o en los cables), se propone expandir el esquema de control a un LQR con integrador (LQI).
+4. **Compensación de fricción no lineal:** Incorporar un modelo dinámico de fricción avanzada (fricción de Coulomb y fricción estática) en el modelado del motor. Esto ayudaría a contrarrestar las zonas muertas (*deadzones*) en la respuesta mecánica y mejoraría la suavidad del brazo rotacional en movimientos muy pequeños.
+
 ---
 
 ## Síntesis del Proyecto

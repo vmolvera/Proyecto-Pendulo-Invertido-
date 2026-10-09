@@ -306,7 +306,7 @@ Por lo tanto:
 Para representar matemáticamente la estructura implementada en Simulink se utiliza:
 
 $$
-A_{kin}=
+A_{gorro}=
 \begin{bmatrix}
 0 & 1 & 0\\
 -l & 0 & m\\
@@ -317,7 +317,7 @@ $$
 y:
 
 $$
-B_{kin}=
+B_{gorro}=
 \begin{bmatrix}
 0\\
 l\\
@@ -328,7 +328,7 @@ $$
 Sustituyendo las ganancias:
 
 $$
-A_{kin}=
+A_{gorro}=
 \begin{bmatrix}
 0 & 1 & 0\\
 -30000 & 0 & -8000000\\
@@ -339,7 +339,7 @@ $$
 y:
 
 $$
-B_{kin}=
+B_{gorro}=
 \begin{bmatrix}
 0\\
 30000\\
@@ -350,13 +350,13 @@ $$
 En MATLAB:
 
 ```matlab
-A_kin_theta = [ 0, 1, 0;
-               -l, 0, m;
-               -1, 0, -beta];
+A_gorro = [ 0, 1, 0;
+          -l, 0, m;
+          -1, 0, -beta];
 
-B_kin_theta = [0;
-               l;
-               1];
+B_gorro = [0;
+           l;
+           1];
 ```
 
 ---
@@ -371,7 +371,7 @@ El observador genera dos variables principales:
 La matriz utilizada para extraer estas señales es:
 
 $$
-C_{kin}=
+C_{gorro}=
 \begin{bmatrix}
 1 & 0 & 0\\
 0 & 1 & 0
@@ -381,7 +381,7 @@ $$
 y:
 
 $$
-D_{kin}=
+D_{gorro}=
 \begin{bmatrix}
 0\\
 0
@@ -391,11 +391,11 @@ $$
 En MATLAB:
 
 ```matlab
-C_kin = [1 0 0;
-         0 1 0];
+C_gorro = [1 0 0;
+           0 1 0];
 
-D_kin = [0;
-         0];
+D_gorro = [0;
+           0];
 ```
 
 La primera salida corresponde a la posición estimada ($$\hat{\theta}
@@ -419,7 +419,7 @@ Internamente, la estructura genera una estimación de posición ($\hat{\theta}$)
 
 En la implementación de Simulink, la señal utilizada como salida del subsistema es principalmente ($$\hat{\dot{\theta}}$$)
 
-![Observador de tercer orden para theta]({{ site.baseurl }}/assets/images/obs3.png)
+![Observador de tercer orden para theta]({{ site.baseurl }}/assets/images/obs2.png)
 
 *Figura 1. Implementación en Simulink del observador cinemático de tercer orden para la estimación de la velocidad angular del brazo.*
 
@@ -441,7 +441,7 @@ Internamente se obtiene una estimación de posición ($\hat{\alpha}$) y una esti
 
 En la implementación de Simulink, la señal utilizada como salida del subsistema es ($$\hat{\dot{\alpha}}$$).
 
-![Observador de tercer orden para alpha]({{ site.baseurl }}/assets/images/obs2.png)
+![Observador de tercer orden para alpha]({{ site.baseurl }}/assets/images/obs3.png)
 
 *Figura 2. Implementación en Simulink del observador cinemático de tercer orden para la estimación de la velocidad angular del péndulo.*
 
@@ -498,10 +498,10 @@ Para analizar la respuesta del observador en MATLAB se crea el sistema:
 
 ```matlab
 sys_observador = ss( ...
-    A_kin_theta, ...
-    B_kin_theta, ...
-    C_kin, ...
-    D_kin);
+    A_gorro, ...
+    B_gorro, ...
+    C_gorro, ...
+    D_gorro);
 ```
 
 Las salidas se identifican como:

@@ -424,17 +424,17 @@ m1 = poly_alpha(4) - (l1 * beta1);
 Las ganancias calculadas se muestran mediante:
 
 ```matlab
-fprintf('GANANCIAS DE LOS OBSERVADORES CINEMATICOS\n')
+fprintf('GANANCIAS DE LOS OBSERVADORES\n')
 
-fprintf('Subsistema Theta:\n')
-fprintf('l = %.4f \n', l);
-fprintf('m = %.4f \n', m);
-fprintf('beta = %.4f \n\n', beta);
+fprintf('Theta:\n')
+fprintf('l = %.2f \n', l);
+fprintf('m = %.2f \n', m);
+fprintf('beta = %.2f \n\n', beta);
 
-fprintf('Subsistema Alpha:\n')
-fprintf('l1 = %.4f \n', l1);
-fprintf('m1 = %.4f \n', m1);
-fprintf('beta1 = %.4f \n\n', beta1);
+fprintf('Alpha:\n')
+fprintf('l1 = %.2f \n', l1);
+fprintf('m1 = %.2f \n', m1);
+fprintf('beta1 = %.2f \n\n', beta1);
 ```
 
 ---
@@ -463,16 +463,16 @@ C_gorro = [1, 0, 0;
            0, 1, 0]; 
 
 D_gorro = [0;
-         0];
+           0];
 ```
 
 Las matrices también pueden visualizarse en la consola:
 
 ```matlab
-disp('Matriz A del Observador Cinematico (A_gorro) =')
+disp('Matriz A del Observador Cinematico (A_gorro):')
 disp(A_gorro)
 
-disp('Matriz B del Observador Cinematico (B_gorro) =')
+disp('Matriz B del Observador Cinematico (B_gorro):')
 disp(B_gorro)
 ```
 
@@ -483,22 +483,15 @@ disp(B_gorro)
 El sistema correspondiente al observador se construye mediante:
 
 ```matlab
-sys_observador = ss( ...
-    A_gorro, ...
-    B_gorro, ...
-    C_gorro, ...
-    D_gorro);
+sys_observador = ss(A_gorro, B_gorro, C_gorro, D_gorro);
 ```
 
 Posteriormente se asignan nombres a sus entradas y salidas:
 
 ```matlab
-sys_observador.OutputName = { ...
-    'Posicion Estimada', ...
-    'Velocidad Estimada'};
+sys_observador.OutputName = {'Posicion Estimada', 'Velocidad Estimada'};
 
-sys_observador.InputName = { ...
-    'Posicion Medida'};
+sys_observador.InputName = {'Posicion Medida'};
 ```
 
 ---
@@ -518,14 +511,11 @@ opciones_bode.Grid = 'on';
 La gráfica se genera mediante:
 
 ```matlab
-figure( ...
-    'Name', ...
-    'Analisis del Observador Cinematico en Frecuencia');
+figure('Name', 'Analisis del Observador Cinematico en Frecuencia');
 
 bode(sys_observador, opciones_bode);
 
-title( ...
-    'Diagrama de Bode del Observador Cinematico (Frecuencia en rad)');
+title('Diagrama de Bode del Observador Cinematico (Frecuencia en rad)');
 ```
 
 
@@ -583,12 +573,9 @@ figure('Name', 'Comparativa de Estimacion de Velocidad');
 
 bode( bode(obs_3er_orden_vel, 'b', filtro_1er_orden, 'r--', derivador_puro, 'g-.', opciones_bode);
 
-title( 'Estimacion de Velocidad: 3er Orden vs Filtro 1er Orden');
+title( 'Estimacion de Velocidad: 3er Orden vs Filtro 1er Orden vs S');
 
-legend('Observador Cinemático (3er Orden)', ...
-    'Filtro Simple (1er Orden)', ...
-    'Location', ...
-    'SouthWest');
+legend('Observador (3er Orden)', 'Filtro Simple (1er Orden)', 'Derivador Puro (s)', 'Location', 'SouthWest');
 ```
 
 Esta comparación permite estudiar la respuesta del observador de tercer orden frente al estimador de primer orden y al comportamiento teórico de un derivador ideal.

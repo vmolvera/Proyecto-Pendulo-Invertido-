@@ -117,8 +117,8 @@ donde:
 
 - ($x_o$) Representa los estados internos del observador.
 - ($y$) Representa la posición angular medida.
-- ($A_{kin}$) Representa la dinámica interna del estimador.
-- ($B_{kin}$) Representa la influencia de la medición sobre el observador.
+- ($A_{gorro}$) Representa la dinámica interna del estimador.
+- ($B_{gorro}$) Representa la influencia de la medición sobre el observador.
 
 Las salidas permiten obtener ($$\hat{\theta}$$) y ($$\hat{\dot{\theta}}$$) para el brazo, así como ($$\hat{\alpha}$$) y ($$\hat{\dot{\alpha}}$$) para el péndulo.
 
@@ -158,7 +158,7 @@ Un observador rápido permite que el error entre la señal real y la estimada di
 Una vez construida la matriz del observador, la ubicación real de los polos se verificó mediante:
 
 ```matlab
-polos_obs_calculados = eig(A_theta);
+polos_obs_calculados = eig(A_gorro);
 ```
 ---
 

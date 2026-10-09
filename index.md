@@ -140,5 +140,5 @@ El flujo general implementado en el sistema es:
 ## Integrantes
 
 - Víctor Manuel Olvera de la Cruz
-- Valerie 
-- Omar 
+- Valerie Gissel Santos Mondragón
+- Omar Rodríguez Nieblas

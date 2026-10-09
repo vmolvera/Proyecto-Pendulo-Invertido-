@@ -84,3 +84,4 @@ La función:
 
 ```matlab
 [K,S,P] = lqr(A,B,Q,R);
+```
